@@ -1,0 +1,26 @@
+site_name: Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+
+theme:
+  name: material
+  language: es
+
+nav:
+  - Home: index.md
+  - Guía 1: Guia_1_Instalacion/Guia_1.md
+  - Guía 2: Guia_2_PID_STM32/Guia_2.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
