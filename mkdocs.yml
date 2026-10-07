@@ -7,6 +7,7 @@ theme:
 nav:
   - Home: index.md
   - Guía 1: Guia_1_Instalacion/Guia_1.md
+  - Guía 1.2: Guia_1.2_Configuracion/Guia_1.2.md
   - Guía 2: Guia_2_PID_STM32/Guia_2.md
 
 markdown_extensions:
