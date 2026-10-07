@@ -1,0 +1,649 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Guía 2: Configuración de las plataformas para PIL - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guia-2-configuracion-de-las-plataformas-para-pil" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-header__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Guía 2: Configuración de las plataformas para PIL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-nav__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_1_Instalacion/Guia_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_1.2_Configuracion/Guia_1.2.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 1.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_2_PID_STM32/Guia_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-nucleo-f767zi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración: NUCLEO-F767ZI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuración: NUCLEO-F767ZI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-seleccionar-la-placa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Seleccionar la placa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-crear-el-proyecto-de-stm32cubemx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Crear el proyecto de STM32CubeMX
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-configurar-el-usart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Configurar el USART
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-indicar-el-puerto-serial-en-el-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Indicar el puerto serial en el modelo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-raspberry-pi-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración: Raspberry Pi 5
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuración: Raspberry Pi 5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-ejecutar-el-asistente-de-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Ejecutar el asistente de hardware
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-apuntar-el-modelo-a-la-placa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Apuntar el modelo a la placa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-revisar-la-arquitectura-y-la-toolchain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Revisar la arquitectura y la toolchain
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validación
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="guia-2-configuracion-de-las-plataformas-para-pil">Guía 2: Configuración de las plataformas para PIL</h1>
+<h2 id="objetivo">Objetivo</h2>
+<p>Esta etapa deja la NUCLEO-F767ZI y la Raspberry Pi 5 configuradas para ejecutar PIL desde Simulink. La configuración se hace una sola vez por modelo e indica en qué placa corre el código y por dónde se comunica con el computador. Al finalizar, el modelo queda listo para las guías siguientes, que solo agregan el subsistema a verificar.</p>
+<h2 id="contexto">Contexto</h2>
+<p>Toda la configuración está en el cuadro <strong>Configuration Parameters</strong> del modelo (<strong>Ctrl+E</strong>), sección <strong>Hardware Implementation</strong>. Lo que cambia entre las dos plataformas es el canal de comunicación: la NUCLEO usa un puerto serial y la Raspberry Pi usa la red local, por lo que se configuran por separado.</p>
+<h2 id="configuracion-nucleo-f767zi">Configuración: NUCLEO-F767ZI</h2>
+<p>El periférico serial que usa PIL no se configura en Simulink, sino en un proyecto de STM32CubeMX que el modelo importa y desde el cual Simulink genera el código de inicialización (<a href="https://www.mathworks.com/help/ecoder/stmicroelectronicsstm32f4discovery/ug/External-mode-PIL.html">Serial Configuration for Monitor &amp; Tune and PIL</a>).</p>
+<h3 id="paso-1-seleccionar-la-placa">Paso 1: Seleccionar la placa</h3>
+<p>Abra el modelo, presione <strong>Ctrl+E</strong> y despliegue <strong>Hardware Implementation &gt; Hardware board</strong>.</p>
+<p>Si la placa aparece por nombre, selecciónela; es el caso de la NUCLEO-F767ZI. Si no aparece, elija la opción custom de la serie de su microcontrolador: sirve para placas de diseño propio cuyo procesador pertenece a una serie soportada (<a href="https://www.mathworks.com/help/stm32b/ug/stm32-cubemx-configuration.html">Configure STM32CubeMX with Simulink</a>). Cuál de los dos casos sea determina el trabajo del Paso 3.</p>
+<blockquote>
+<p><strong>[Agregar imagen: lista Hardware board desplegada, con la entrada de la NUCLEO-F767ZI y la opción custom de la serie F7xx.]</strong></p>
+</blockquote>
+<h3 id="paso-2-crear-el-proyecto-de-stm32cubemx">Paso 2: Crear el proyecto de STM32CubeMX</h3>
+<p>En <strong>Build options</strong>, use <strong>Browse</strong> si ya tiene un proyecto <code>.ioc</code>, o <strong>Create</strong> para crear uno nuevo: escriba el nombre con extensión <code>.ioc</code>, elija la carpeta, seleccione el hardware y confirme con <strong>Apply</strong> y <strong>OK</strong>. Conviene guardarlo junto al modelo, porque ambos archivos quedan amarrados. Luego presione <strong>Launch</strong> para abrirlo en STM32CubeMX (<a href="https://www.mathworks.com/help/stm32b/ug/stm32-cubemx-configuration.html">Configure STM32CubeMX with Simulink</a>).</p>
+<blockquote>
+<p><strong>[Agregar imagen: sección Build options con los botones Browse, Create y Launch.]</strong></p>
+</blockquote>
+<h3 id="paso-3-configurar-el-usart">Paso 3: Configurar el USART</h3>
+<p><strong>Placa con soporte.</strong> El proyecto se creó desde la definición de la placa, así que los periféricos y sus pines ya vienen asignados con la configuración por defecto (<a href="https://www.st.com/resource/en/user_manual/um1718-stm32cubemx.pdf">UM1718, manual de STM32CubeMX</a>). No hay que asignar pines: solo habilitar el periférico. En la NUCLEO-F767ZI es el USART3, porque el ST-LINK expone un puerto COM virtual hacia el computador conectado internamente a ese periférico, en los pines PD8 y PD9 (<a href="https://www.st.com/resource/en/user_manual/dm00244518.pdf">UM1974, manual de las placas Nucleo-144</a>).</p>
+<p><strong>Placa sin soporte.</strong> El proyecto se creó solo desde el microcontrolador y parte sin pines asignados, así que antes hay que resolver dos cosas. En <strong>Clock Configuration</strong>, habilitar el cristal externo en el periférico <strong>RCC</strong> y ajustar el árbol de reloj a la frecuencia real de la placa; si el reloj queda mal, el baud rate efectivo no coincide con el nominal y la comunicación falla. En <strong>Pinout &amp; Configuration</strong>, asignar los pines TX y RX del USART elegido, haciendo clic sobre ellos en el diagrama del encapsulado, según el esquemático de la placa.</p>
+<blockquote>
+<p><strong>[Agregar imagen: vista Pinout &amp; Configuration con los pines TX y RX asignados, para el caso sin soporte.]</strong></p>
+</blockquote>
+<p>En ambos casos, la configuración del periférico es la de la Tabla 1. Al terminar, guarde el proyecto (<a href="https://www.mathworks.com/help/ecoder/stmicroelectronicsstm32f4discovery/ug/External-mode-PIL.html">Serial Configuration for Monitor &amp; Tune and PIL</a>).</p>
+<p><em>Tabla 1: Configuración del USART en STM32CubeMX.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mode</td>
+<td>Asynchronous.</td>
+</tr>
+<tr>
+<td>Baud Rate</td>
+<td>El que usará el modelo; anótelo.</td>
+</tr>
+<tr>
+<td>DMA Settings</td>
+<td>Solicitud DMA para la recepción del USART.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>[Agregar imagen: configuración del USART3 en STM32CubeMX, con Mode, Baud Rate y la solicitud DMA.]</strong></p>
+</blockquote>
+<h3 id="paso-4-indicar-el-puerto-serial-en-el-modelo">Paso 4: Indicar el puerto serial en el modelo</h3>
+<p>Conecte la placa con un cable Micro USB y anote el puerto COM que le asigna Windows, visible en el Administrador de dispositivos bajo <strong>Puertos (COM y LPT)</strong>.</p>
+<p>Vuelva a <strong>Configuration Parameters</strong>, entre a <strong>Hardware Implementation &gt; Target hardware resources &gt; Connectivity</strong> e indique el <strong>USART</strong> del Paso 3 y ese <strong>COM Port</strong> (<a href="https://www.mathworks.com/help/stm32b/ug/STM32F4xx-PIL-example.html">Code Verification and Validation with PIL for STM32</a>). El baud rate debe coincidir con el del proyecto de STM32CubeMX. Estos tres valores son la causa más común de que PIL no logre comunicarse.</p>
+<blockquote>
+<p><strong>[Agregar imagen: pestaña Connectivity con los campos USART y COM Port.]</strong></p>
+</blockquote>
+<h2 id="configuracion-raspberry-pi-5">Configuración: Raspberry Pi 5</h2>
+<p>Aquí no se configura hardware. Simulink se conecta a la placa por red como a un computador remoto, copia el código generado, lo compila en su Linux y ejecuta ahí el resultado, por lo que solo necesita una dirección y credenciales de acceso (<a href="https://www.mathworks.com/help/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html">Model Configuration Simulink Support Package for Raspberry Pi Hardware</a>). La placa debe estar encendida y en la misma red cada vez que se ejecute PIL.</p>
+<h3 id="paso-1-ejecutar-el-asistente-de-hardware">Paso 1: Ejecutar el asistente de hardware</h3>
+<p>El asistente instala en la placa las librerías que necesita para trabajar con Simulink y deja guardadas la dirección y las credenciales; se pasa una vez por placa. Ábralo desde el <strong>Add-On Manager</strong>, en <strong>Setup</strong> del paquete de soporte, y siga las pantallas en orden: en <em>Review Required Packages and Libraries</em> confirme la instalación de los paquetes que lista (<a href="https://www.mathworks.com/help/simulink/supportpkg/raspberrypi_ug/install-target-for-raspberry-pi-hardware.html">Install Support for Raspberry Pi Hardware</a>).</p>
+<blockquote>
+<p><strong>[Agregar imágenes: pantallas del asistente en orden, una por paso.]</strong></p>
+</blockquote>
+<h3 id="paso-2-apuntar-el-modelo-a-la-placa">Paso 2: Apuntar el modelo a la placa</h3>
+<p>Presione <strong>Ctrl+E</strong> y en <strong>Hardware Implementation &gt; Hardware board</strong> seleccione <strong>Raspberry Pi</strong>. Eso carga los parámetros de la placa, de los cuales hay que completar los cuatro de la Tabla 2 (<a href="https://www.mathworks.com/help/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html">Model Configuration Simulink Support Package for Raspberry Pi Hardware</a>).</p>
+<p><em>Tabla 2: Parámetros de conexión con la Raspberry Pi.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Device Address</td>
+<td>Dirección IP o nombre de host de la placa.</td>
+</tr>
+<tr>
+<td>Username</td>
+<td>Usuario de Linux de la placa.</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>Contraseña de ese usuario.</td>
+</tr>
+<tr>
+<td>Build directory</td>
+<td>Carpeta de compilación, dentro del Linux de la placa.</td>
+</tr>
+</tbody>
+</table>
+<p>La dirección IP se obtiene ejecutando <code>hostname -I</code> en la terminal de la placa, entre otros métodos (<a href="https://www.mathworks.com/help/simulink/setup-and-configuration-raspberrypi.html">Get IP Address of Raspberry Pi Hardware</a>). Conviene fijarla en el router: si cambia, el modelo deja de encontrar la placa. El <strong>Build directory</strong> es una ruta de Linux, no de Windows.</p>
+<p>Para confirmar lo registrado, ejecute <code>raspberrypi</code> en la ventana de comandos: devuelve el nombre de host, el usuario, la contraseña y el directorio de compilación almacenados (<a href="https://www.mathworks.com/help/simulink/setup-and-configuration-raspberrypi.html">Installation Setup and Configuration</a>).</p>
+<blockquote>
+<p><strong>[Agregar imagen: panel de Hardware Implementation con los cuatro campos completados.]</strong></p>
+</blockquote>
+<h3 id="paso-3-revisar-la-arquitectura-y-la-toolchain">Paso 3: Revisar la arquitectura y la toolchain</h3>
+<p><strong>Device type</strong> indica para qué arquitectura se compila y debe corresponder al sistema operativo instalado en la placa: ARM Cortex-A (32-bit) o ARM Cortex-A (64-bit) (<a href="https://www.mathworks.com/help/simulink/supportpkg/raspberrypi_ug/optimize-code-for-raspberry-pi-using-code-replacement-library.html">Optimize Code for Raspberry Pi Using Code Replacement Library</a>). Que la Raspberry Pi 5 soporte 64 bits no garantiza que la imagen instalada lo sea, así que verifíquelo en la placa.</p>
+<p>En <strong>Code Generation &gt; Toolchain</strong> debe estar <em>GNU GCC Embedded Linux</em>, el compilador cruzado que usa el ejemplo oficial de PIL con Raspberry Pi (<a href="https://www.mathworks.com/help/reinforcement-learning/ug/sil-and-pil-verification-for-reinforcement-learning.html">SIL and PIL Verification for Reinforcement Learning</a>). Normalmente queda asignado al seleccionar la placa.</p>
+<blockquote>
+<p><strong>[Agregar imagen: campo Device type y panel Code Generation &gt; Toolchain.]</strong></p>
+</blockquote>
+<h2 id="validacion">Validación</h2>
+<p>Si el modelo tiene seleccionada la placa y los parámetros de comunicación completos, la configuración está lista. Guarde el modelo: la <a href="../Guia_3_PID_STM32/Guia_3.md">Guía 3</a> construye un controlador PID y lo ejecuta en la NUCLEO-F767ZI mediante PIL.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
