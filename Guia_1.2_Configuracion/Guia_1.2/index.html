@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../../Guia_1_Instalacion/Guia_1/">
+      
+      
+        <link rel="next" href="../../Guia_2_PID_STM32/Guia_2/">
       
       
         
@@ -19,7 +23,7 @@
     
     
       
-        <title>Guía 1.2: Configuración de las plataformas para PIL - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
+        <title>Guía 1.2 - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
       
     
     
@@ -96,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Guía 1.2: Configuración de las plataformas para PIL
+              Guía 1.2
             
           </span>
         </div>
@@ -243,10 +247,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../Guia_1.2_Configuracion/Guia_1.2.md" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 1.2
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -262,6 +293,220 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-previo-solver-del-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso previo: solver del modelo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-1-stm32-con-soporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración 1: STM32 con soporte
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuración 1: STM32 con soporte">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-seleccionar-la-placa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Seleccionar la placa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-configurar-la-comunicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Configurar la comunicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-2-stm32-sin-soporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración 2: STM32 sin soporte
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuración 2: STM32 sin soporte">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-seleccionar-la-serie" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Seleccionar la serie
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-crear-el-proyecto-de-stm32cubemx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Crear el proyecto de STM32CubeMX
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-configurar-el-reloj-los-pines-y-el-usart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Configurar el reloj, los pines y el USART
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-configurar-la-comunicacion-en-el-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Configurar la comunicación en el modelo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-3-raspberry-pi-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración 3: Raspberry Pi 5
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuración 3: Raspberry Pi 5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-seleccionar-la-placa_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Seleccionar la placa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-completar-los-parametros-de-conexion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Completar los parámetros de conexión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-revisar-la-toolchain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Revisar la toolchain
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validación
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
