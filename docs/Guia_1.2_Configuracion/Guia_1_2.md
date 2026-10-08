@@ -54,7 +54,7 @@ Algunas placas no aparecen por nombre en la lista de Simulink, aunque su microco
  
 En vez de una placa, se elige una opción genérica de la serie del microcontrolador. En **Hardware Implementation > Hardware board**, elige la opción custom de tu serie (en la serie F4xx, la documentación la llama *custom STM32F4xx Based hardware*).
  
-*[Agregar imagen: lista Hardware board con la opción custom de la serie.]*
+
  
 ### Paso 2: Crear el proyecto de STM32CubeMX
  
@@ -62,7 +62,7 @@ STM32CubeMX es la herramienta donde se configuran los periféricos del microcont
  
 En *Build options*, usa *Browse* si ya tienes un proyecto `.ioc`, o *Create* para crear uno nuevo: escribe el nombre con extensión `.ioc`, elige la carpeta, selecciona el microcontrolador de tu placa y confirma con *Apply* y *OK*. Luego presiona *Launch* para abrirlo en STM32CubeMX.
  
-*[Agregar imagen: sección Build options con los botones Browse, Create y Launch.]*
+
  
 ### Paso 3: Configurar el reloj, los pines y el USART
  
@@ -85,8 +85,7 @@ En *Clock Configuration*, ajusta el reloj del sistema. En *Pinout & Configuratio
 Con el proyecto listo, falta indicarle al modelo el puerto del computador y el USART elegido. Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en *Puertos (COM y LPT)*.
  
 En *Hardware Implementation > Target hardware resources*, selecciona *External mode* y, en *Communication interface*, elige *Serial*. En *Connectivity*, selecciona el USART configurado en el paso anterior e indica el COM Port. El baud rate debe coincidir con el del proyecto de STM32CubeMX.
- 
-*[Agregar imagen: pestaña Connectivity con los campos USART y COM Port.]*
+
  
 ## Configuración 3: Raspberry Pi 5
  

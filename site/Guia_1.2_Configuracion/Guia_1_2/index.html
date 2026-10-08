@@ -572,11 +572,9 @@
 <p>Algunas placas no aparecen por nombre en la lista de Simulink, aunque su microcontrolador sí pertenezca a una serie soportada. Como Simulink no conoce la placa, el USART y sus pines deben configurarse a mano en un proyecto de STM32CubeMX, y el modelo importa ese proyecto. Aquí se parte con el solver del paso previo.</p>
 <h3 id="paso-1-seleccionar-la-serie">Paso 1: Seleccionar la serie</h3>
 <p>En vez de una placa, se elige una opción genérica de la serie del microcontrolador. En <strong>Hardware Implementation &gt; Hardware board</strong>, elige la opción custom de tu serie (en la serie F4xx, la documentación la llama <em>custom STM32F4xx Based hardware</em>).</p>
-<p><em>[Agregar imagen: lista Hardware board con la opción custom de la serie.]</em></p>
 <h3 id="paso-2-crear-el-proyecto-de-stm32cubemx">Paso 2: Crear el proyecto de STM32CubeMX</h3>
 <p>STM32CubeMX es la herramienta donde se configuran los periféricos del microcontrolador, y el modelo la recibe como un proyecto con extensión <code>.ioc</code>. En este paso se crea ese proyecto y se abre.</p>
 <p>En <em>Build options</em>, usa <em>Browse</em> si ya tienes un proyecto <code>.ioc</code>, o <em>Create</em> para crear uno nuevo: escribe el nombre con extensión <code>.ioc</code>, elige la carpeta, selecciona el microcontrolador de tu placa y confirma con <em>Apply</em> y <em>OK</em>. Luego presiona <em>Launch</em> para abrirlo en STM32CubeMX.</p>
-<p><em>[Agregar imagen: sección Build options con los botones Browse, Create y Launch.]</em></p>
 <h3 id="paso-3-configurar-el-reloj-los-pines-y-el-usart">Paso 3: Configurar el reloj, los pines y el USART</h3>
 <p>Un proyecto creado solo desde el microcontrolador parte sin pines asignados. Antes de configurar el USART hay que resolver el reloj y los pines.</p>
 <p>En <em>Clock Configuration</em>, ajusta el reloj del sistema. En <em>Pinout &amp; Configuration</em>, asigna los pines TX y RX del USART elegido, haciendo clic sobre ellos en el diagrama del encapsulado; los pines conectados al ST-LINK están indicados en el esquemático de la placa. Después configura el USART con los valores de la Tabla 1 y guarda el proyecto (<a href="https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/External-mode-PIL.html">Serial Configuration for Monitor &amp; Tune and PIL</a>).</p>
@@ -607,7 +605,6 @@
 <h3 id="paso-4-configurar-la-comunicacion-en-el-modelo">Paso 4: Configurar la comunicación en el modelo</h3>
 <p>Con el proyecto listo, falta indicarle al modelo el puerto del computador y el USART elegido. Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en <em>Puertos (COM y LPT)</em>.</p>
 <p>En <em>Hardware Implementation &gt; Target hardware resources</em>, selecciona <em>External mode</em> y, en <em>Communication interface</em>, elige <em>Serial</em>. En <em>Connectivity</em>, selecciona el USART configurado en el paso anterior e indica el COM Port. El baud rate debe coincidir con el del proyecto de STM32CubeMX.</p>
-<p><em>[Agregar imagen: pestaña Connectivity con los campos USART y COM Port.]</em></p>
 <h2 id="configuracion-3-raspberry-pi-5">Configuración 3: Raspberry Pi 5</h2>
 <p>La Raspberry Pi 5 es un computador con Linux, por lo que no se configuran periféricos ni pines. Simulink se conecta a ella por red, usando la dirección y las credenciales de su Linux, y esos datos se ingresan en la configuración del modelo (<a href="https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html">Model Configuration Simulink Support Package for Raspberry Pi Hardware</a>). La placa debe estar encendida y en la misma red que el computador. Aquí también se parte con el solver del paso previo.</p>
 <h3 id="paso-1-seleccionar-la-placa_1">Paso 1: Seleccionar la placa</h3>
