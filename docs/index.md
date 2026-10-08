@@ -7,12 +7,13 @@ Este sitio busca facilitar la configuración de simulaciones Processor-in-the-Lo
 Las guías siguen un orden progresivo, desde la instalación del entorno hasta un controlador PID ejecutándose en la placa.
 
 - [Guía 1](Guia_1_Instalacion/Guia_1.md): Instalación del entorno.
+- [Guía 1.2](Guia_1.2_Configuración/Guia_1.2.md): Instalación del entorno.
 - [Guía 2](Guia_2_PID_STM32/Guia_2.md): Controlador PID con PIL en STM32F767ZI.
 
 
 Los modelos y scripts de cada guía se encuentran en el siguiente repositorio:
 
-[\[COMPLETAR: URL del repositorio\]](https://juliannt.github.io/Guia-uso-pil/)
+[\[URL del repositorio\]](https://juliannt.github.io/Guia-uso-pil/)
 
 ## Plataforma utilizada
 
