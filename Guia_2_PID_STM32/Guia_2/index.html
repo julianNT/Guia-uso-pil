@@ -401,10 +401,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-configurar-el-usart3-en-stm32cubemx" class="md-nav__link">
+  <a href="#paso-4-configurar-la-comunicacion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 4: Configurar el USART3 en STM32CubeMX
+        Paso 4: Configurar la comunicación
       
     </span>
   </a>
@@ -556,10 +556,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-configurar-el-usart3-en-stm32cubemx" class="md-nav__link">
+  <a href="#paso-4-configurar-la-comunicacion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 4: Configurar el USART3 en STM32CubeMX
+        Paso 4: Configurar la comunicación
       
     </span>
   </a>
@@ -627,39 +627,27 @@
 
 
 
+<p>Guia 2 · MD</p>
 <h1 id="guia-2-controlador-pid-con-pil-en-stm32f767zi">Guía 2: Controlador PID con PIL en STM32F767ZI</h1>
 <h2 id="objetivo">Objetivo</h2>
-<p>En esta guía el lector implementa un controlador PID discreto y lo ejecuta en la NUCLEO-F767ZI mediante PIL. Luego verifica que el código generado reproduce el modelo. Al final, el lector cambia las ganancias del controlador sin recompilar el código.</p>
+<p>En esta guía el lector implementa un controlador PID discreto y lo ejecuta en la NUCLEO-F767ZI mediante PIL. Luego se necesita verificar que el código generado reproduce el modelo. Al final, se busca cambiar las ganancias del controlador sin recompilar el código.</p>
 <h2 id="contexto">Contexto</h2>
-<p>La guía utiliza PIL mediante el bloque Model de Simulink. En modo PIL, el bloque Model genera código del modelo referenciado, lo compila para la plataforma objetivo y lo ejecuta en ella (<a href="https://www.mathworks.com/help/simulink/slref/model.html">Model block</a>). Durante la simulación, el anfitrión y la placa intercambian datos en cada paso de tiempo (<a href="https://www.mathworks.com/help//releases/R2021a/simulink/slref/model.html">Model block, R2021a</a>).</p>
-<p>El controlador queda en un modelo referenciado, que se ejecuta en la placa. La planta queda en el modelo de prueba, que se ejecuta en Simulink. La Figura 1 muestra esa partición y las señales que cruzan el canal serial en cada paso <span class="arithmatex">\(k\)</span>.</p>
-<pre class="mermaid"><code>flowchart LR
-    subgraph H["Computador anfitrión (Simulink)"]
-        R["Referencia r[k]"] --&gt; S(("Σ"))
-        P["Planta G(z)"]
-    end
-    subgraph T["NUCLEO-F767ZI"]
-        C["Código del PID"]
-    end
-    S --&gt;|"e[k] por USART3"| C
-    C --&gt;|"u[k] por USART3"| P
-    P --&gt;|"y[k]"| S</code></pre>
+<p>La guía utiliza PIL mediante el bloque Model de Simulink. En modo PIL, el bloque Model genera código del modelo referenciado, lo compila para la plataforma objetivo y lo ejecuta en ella (<a href="https://www.mathworks.com/help/simulink/slref/model.html">Model block</a>). Durante la simulación, el anfitrión y la placa intercambian datos en cada paso de tiempo.</p>
+<p>La guía usa dos modelos de Simulink (archivos <code>.slx</code>). El modelo del controlador, <code>pid_ctrl.slx</code>, se ejecuta en la placa. El modelo de prueba, <code>banco_pid.slx</code>, contiene la planta y se ejecuta en Simulink. </p>
+<p><img alt="alt text" src="../image-6.png" /></p>
 <p><em>Figura 1: Partición del lazo de control en una simulación PIL con bloque Model.</em></p>
 <p>El modelo de prueba contiene dos bloques Model que apuntan al mismo controlador, uno en modo PIL y otro en modo Normal. El ejemplo oficial de MathWorks para STM32 usa esa misma estructura (<a href="https://www.mathworks.com/help/stm32b/ug/STM32F4xx-PIL-example.html">Code Verification and Validation with PIL for STM32</a>). La comparación entre ambos lazos muestra si el código ejecutado en la placa reproduce el modelo.</p>
 <h2 id="caso-de-estudio">Caso de estudio</h2>
-<p>La planta es un sistema de primer orden con ganancia unitaria y constante de tiempo <span class="arithmatex">\(\tau = 10\ \text{ms}\)</span>, que aproxima un motor DC. El periodo de muestreo es <span class="arithmatex">\(T_s = 1\ \text{ms}\)</span>. La discretización con retenedor de orden cero (ZOH) entrega la planta discreta de la Ecuación 1.</p>
+<p>La planta es un sistema de primer orden con ganancia unitaria y constante de tiempo <span class="arithmatex">\(\tau = 10\ \text{ms}\)</span>, que aproxima un motor DC. El periodo de muestreo es <span class="arithmatex">\(T_s = 1\ \text{ms}\)</span>. La planta se implementa directamente en tiempo discreto, con la función de transferencia de la Ecuación 1.</p>
 <div class="arithmatex">\[
 G(z) = \frac{0.0952}{z - 0.9048} \tag{1}
 \]</div>
-<p>La función <code>c2d</code> de Control System Toolbox calcula la Ecuación 1 con el método ZOH, que asume entradas constantes durante cada periodo de muestreo (<a href="https://www.mathworks.com/help/control/ref/dynamicsystem.c2d.html">c2d</a>):</p>
-<div class="highlight"><pre><span></span><code><span class="n">G</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c2d</span><span class="p">(</span><span class="n">tf</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">0.01</span><span class="w"> </span><span class="mi">1</span><span class="p">]),</span><span class="w"> </span><span class="mf">0.001</span><span class="p">,</span><span class="w"> </span><span class="s">'zoh'</span><span class="p">)</span>
-</code></pre></div>
-<p>El controlador usa el bloque Discrete PID Controller en forma paralela. Sus ganancias son <span class="arithmatex">\(K_p = 0.5\)</span> (proporcional), <span class="arithmatex">\(K_i = 10\)</span> (integral) y <span class="arithmatex">\(K_d = 0\)</span> (derivativa). Con <span class="arithmatex">\(K_d = 0\)</span> el controlador actúa como un PI. La guía mantiene la estructura PID para que el lector pueda agregar acción derivativa sin modificar el modelo.</p>
+<p>Los coeficientes de la Ecuación 1 equivalen a discretizar la planta continua <span class="arithmatex">\(G(s) = 1/(\tau s + 1)\)</span> con retenedor de orden cero (ZOH). El polo es <span class="arithmatex">\(e^{-T_s/\tau} = 0.9048\)</span> y el numerador es <span class="arithmatex">\(1 - e^{-T_s/\tau} = 0.0952\)</span>. En Simulink, la planta se implementa con un bloque Discrete Transfer Fcn que usa esos coeficientes (Paso 5).</p>
 <h2 id="paso-1-definir-los-parametros-del-controlador">Paso 1: Definir los parámetros del controlador</h2>
-<p>Las ganancias del controlador se definen como variables del workspace y no como números escritos en el bloque. En Model block PIL, Simulink permite ajustar parámetros del workspace, pero no parámetros escritos en el cuadro de diálogo del bloque (<a href="https://www.mathworks.com/help/ecoder/ug/sil-and-pil-simulation-limitations.html">SIL and PIL Limitations</a>).</p>
-<p>Cada ganancia se crea como un objeto <code>Simulink.Parameter</code> con la clase de almacenamiento <code>ExportedGlobal</code>. Esa clase hace que el parámetro aparezca en el código generado como una variable global ajustable (<a href="https://www.mathworks.com/help/rtw/ug/use-parameter-objects-for-code-generation.html">Create Tunable Calibration Parameter</a>).</p>
+<p>Las ganancias del controlador se definen como variables del workspace y no como números escritos en el bloque. En Model block PIL, Simulink permite ajustar parámetros del workspace.</p>
+<p>Cada ganancia se crea como un objeto <code>Simulink.Parameter</code> con la clase de almacenamiento <code>ExportedGlobal</code>. Esa clase hace que el parámetro aparezca en el código generado como una variable global ajustable.</p>
 <p>Cree el script <code>parametros_pid.m</code> con el siguiente contenido y ejecútelo antes de abrir los modelos:</p>
-<div class="highlight"><pre><span></span><code><span class="n">Ts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.001</span><span class="p">;</span><span class="w">                                   </span><span class="c">% Periodo de muestreo [s]</span>
+<div class="highlight"><pre><span></span><code><span class="n">Ts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.001</span><span class="p">;</span><span class="w">                                   </span><span class="c">% Periodo de muestreo[s]</span>
 
 <span class="n">Kp</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Simulink</span><span class="p">.</span><span class="n">Parameter</span><span class="p">(</span><span class="mf">0.5</span><span class="p">);</span><span class="w">                 </span><span class="c">% Ganancia proporcional</span>
 <span class="n">Kp</span><span class="p">.</span><span class="n">CoderInfo</span><span class="p">.</span><span class="n">StorageClass</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">'ExportedGlobal'</span><span class="p">;</span>
@@ -672,8 +660,10 @@ G(z) = \frac{0.0952}{z - 0.9048} \tag{1}
 </code></pre></div>
 <p>El periodo de muestreo <code>Ts</code> queda como un número simple, porque el tiempo de muestreo no es un parámetro ajustable entre simulaciones (<a href="https://www.mathworks.com/help/simulink/ug/fast-restart-workflow.html">Get Started with Fast Restart</a>).</p>
 <h2 id="paso-2-crear-el-modelo-del-controlador">Paso 2: Crear el modelo del controlador</h2>
-<p>Cree un modelo nuevo llamado <code>pid_ctrl.slx</code> con tres bloques conectados en serie. El <strong>Inport</strong> recibe el error <span class="arithmatex">\(e[k]\)</span>, el <strong>Discrete PID Controller</strong> calcula la acción de control y el <strong>Outport</strong> entrega <span class="arithmatex">\(u[k]\)</span>. La Figura 2 muestra el modelo resultante.</p>
+<p>Cree un modelo nuevo llamado <code>pid_ctrl.slx</code> con tres bloques conectados en serie. El bloque Inport recibe el error <span class="arithmatex">\(e[k]\)</span>, el bloque Discrete PID Controller calcula la acción de control y el bloque Outport entrega <span class="arithmatex">\(u[k]\)</span>. La Figura 2 muestra el modelo resultante.</p>
 <p>Configure el bloque Discrete PID Controller con los valores de la Tabla 1 (<a href="https://www.mathworks.com/help/simulink/slref/discretepidcontroller.html">Discrete PID Controller</a>).</p>
+<p><img alt="alt text" src="../image-1.png" /></p>
+<p><img alt="alt text" src="../image-3.png" /></p>
 <p><em>Tabla 1: Parámetros del bloque Discrete PID Controller.</em></p>
 <table>
 <thead>
@@ -717,17 +707,9 @@ G(z) = \frac{0.0952}{z - 0.9048} \tag{1}
 </tr>
 </tbody>
 </table>
-<p>La documentación del bloque recomienda Forward Euler cuando el periodo de muestreo es pequeño respecto del ancho de banda del controlador (<a href="https://www.mathworks.com/help/simulink/slref/discretepidcontroller.html">Discrete PID Controller</a>). En el caso de estudio, <span class="arithmatex">\(T_s\)</span> es diez veces menor que la constante de tiempo <span class="arithmatex">\(\tau\)</span> de la planta.</p>
-<div class="admonition warning">
-<p class="admonition-title">Bloques que no deben ir en este modelo</p>
-<p>El modelo <code>pid_ctrl</code> no debe contener bloques Scope ni To Workspace. SIL y PIL no admiten bloques Scope, y Model block PIL no admite bloques To Workspace ni tiempos de muestreo continuos (<a href="https://www.mathworks.com/help/ecoder/ug/sil-and-pil-simulation-limitations.html">SIL and PIL Limitations</a>).</p>
-</div>
-<div class="admonition info">
-<p class="admonition-title">Figura 2 (pendiente)</p>
-<p>Captura del modelo <code>pid_ctrl.slx</code> con Inport, Discrete PID Controller y Outport.</p>
-</div>
+<p>La documentación del bloque recomienda Forward Euler cuando el periodo de muestreo es pequeño respecto del ancho de banda del controlador. En el caso de estudio, <span class="arithmatex">\(T_s\)</span> es diez veces menor que la constante de tiempo <span class="arithmatex">\(\tau\)</span> de la planta.</p>
 <h2 id="paso-3-configurar-el-modelo-del-controlador">Paso 3: Configurar el modelo del controlador</h2>
-<p>Abra <strong>Model Configuration Parameters</strong> con <strong>Ctrl+E</strong> y ajuste las opciones de la Tabla 2.</p>
+<p>Abra Model Configuration Parameters con Ctrl+E y ajuste las opciones de la Tabla 2.</p>
 <p><em>Tabla 2: Configuración del modelo <code>pid_ctrl</code>.</em></p>
 <table>
 <thead>
@@ -751,7 +733,7 @@ G(z) = \frac{0.0952}{z - 0.9048} \tag{1}
 <tr>
 <td>Solver</td>
 <td>Fixed-step size</td>
-<td><code>0.001</code></td>
+<td><code>auto</code></td>
 </tr>
 <tr>
 <td>Hardware Implementation</td>
@@ -765,87 +747,49 @@ G(z) = \frac{0.0952}{z - 0.9048} \tag{1}
 </tr>
 </tbody>
 </table>
-<p>La generación de código requiere un solver de paso fijo (<a href="https://www.mathworks.com/help/simulink/gui/type.html">Type</a>). PIL además requiere que <strong>Hardware Implementation</strong> describa correctamente la placa, incluido el orden de bytes; si no, la simulación falla (<a href="https://www.mathworks.com/help/ecoder/ug/sil-and-pil-simulation-limitations.html">SIL and PIL Limitations</a>). El archivo <code>ert.tlc</code> corresponde a Embedded Coder, y SIL/PIL admite solo archivos ERT, GRT o AUTOSAR (<a href="https://www.mathworks.com/help/ecoder/ug/configuring-a-sil-or-pil-simulation.html">Configure and Run SIL Simulation</a>).</p>
-<p>Luego configure la comunicación. En <strong>Hardware Implementation &gt; Target hardware resources &gt; Connectivity</strong>, seleccione el <strong>COM Port</strong> anotado en la Guía 1 y el <strong>USART</strong> <code>USART3</code> (<a href="https://www.mathworks.com/help/stm32b/ug/STM32F4xx-PIL-example.html">Code Verification and Validation with PIL for STM32</a>).</p>
-<div class="admonition info">
-<p class="admonition-title">Figura 3 (pendiente)</p>
-<p>Captura del panel Connectivity con el COM Port y USART3.</p>
-</div>
-<h2 id="paso-4-configurar-el-usart3-en-stm32cubemx">Paso 4: Configurar el USART3 en STM32CubeMX</h2>
-<p>El USART3 del microcontrolador usa los pines PD8 (TX) y PD9 (RX), que la placa conecta al ST-LINK como puerto COM virtual (<a href="https://docs.zephyrproject.org/latest/boards/st/nucleo_f767zi/doc/index.html">Zephyr: Nucleo F767ZI</a>). Por ese motivo, la comunicación PIL usa el USART3 y no requiere cables adicionales.</p>
-<p>Primero cree el proyecto de STM32CubeMX desde el modelo (<a href="https://www.mathworks.com/help/stm32b/ug/stm32-cubemx-configuration.html">Configure STM32CubeMX with Simulink</a>):</p>
-<ol>
-<li>En <strong>Hardware Implementation &gt; Build options</strong>, presione <strong>Create</strong>.</li>
-<li>Asigne un nombre con extensión <code>.ioc</code>, seleccione la carpeta y presione <strong>Apply</strong> y <strong>OK</strong>.</li>
-<li>Presione <strong>Launch</strong> para abrir el proyecto en STM32CubeMX.</li>
-</ol>
-<p>Luego configure el USART3 en STM32CubeMX y guarde el proyecto (<a href="https://www.mathworks.com/help/stm32b/ug/External-mode-PIL.html">Serial Configuration for PIL</a>):</p>
-<ol>
-<li>Configure <strong>Mode</strong> en <code>Asynchronous</code>.</li>
-<li>Especifique la <strong>Baud Rate</strong> [COMPLETAR: valor usado].</li>
-<li>En <strong>DMA Settings</strong>, agregue una solicitud DMA para la recepción (RX).</li>
-<li>Verifique que los pines asignados sean PD8 y PD9.</li>
-</ol>
-<p>PIL funciona solo si esta configuración queda en el proyecto <code>.ioc</code> y el modelo importa ese archivo (<a href="https://www.mathworks.com/help/stm32b/ug/External-mode-PIL.html">Serial Configuration for PIL</a>).</p>
-<div class="admonition info">
-<p class="admonition-title">Figura 4 (pendiente)</p>
-<p>Capturas de STM32CubeMX con USART3 en modo Asynchronous y la solicitud DMA de recepción.</p>
-</div>
+<p>Para generar y verificar código, el modelo debe usar un solver de paso fijo, porque el código generado solo admite ese tipo de solver (<a href="https://mathworks.com/help/simulink/ug/types-of-solvers.html">Choose a Solver</a>). Además, el controlador solo tiene estados discretos, por lo que el solver <code>discrete (no continuous states)</code> es el adecuado (<a href="https://www.mathworks.com/help//releases/R2021a/simulink/gui/solver.html">Solver</a>).</p>
+<p>El parámetro Fixed-step size se deja en <code>auto</code>, su valor por defecto. Con <code>auto</code>, Simulink elige un paso que cubra todos los tiempos de muestreo del modelo (<a href="https://www.mathworks.com/help/simulink/gui/fixedstepsizefundamentalsampletime.html">Fixed-step size</a>). Como el único tiempo de muestreo del modelo es <code>Ts</code>, el paso resultante es <code>Ts</code>. Una vez compilado el modelo, el paso elegido se puede revisar en la ventana Solver information.</p>
+<p>PIL además requiere que Hardware Implementation describa correctamente la placa, incluido el orden de bytes. Si no, la simulación falla. El archivo <code>ert.tlc</code> corresponde a Embedded Coder, y SIL/PIL admite solo archivos ERT, GRT o AUTOSAR (<a href="https://www.mathworks.com/help/ecoder/ug/configuring-a-sil-or-pil-simulation.html">Configure and Run SIL Simulation</a>).</p>
+<h2 id="paso-4-configurar-la-comunicacion">Paso 4: Configurar la comunicación</h2>
+<p>En una simulación PIL, el computador y la placa intercambian datos en cada paso de tiempo. Aquí ese intercambio ocurre por el puerto serial: el computador envía el error <span class="arithmatex">\(e[k]\)</span> a la placa por el USART3 y recibe de vuelta la acción de control <span class="arithmatex">\(u[k]\)</span> (Figura 1). La configuración del USART3 se explica en la Guía 1.2.</p>
+<p>En Hardware Implementation &gt; Target hardware resources &gt; Connectivity, seleccione el COM Port anotado en la Guía 1 y el USART <code>USART3</code>.</p>
 <h2 id="paso-5-crear-el-modelo-de-prueba">Paso 5: Crear el modelo de prueba</h2>
-<p>Cree el modelo <code>banco_pid.slx</code> y aplique la misma configuración de los Pasos 3 y 4. El ejemplo oficial también configura el modelo de prueba para la placa STM32 (<a href="https://www.mathworks.com/help/stm32b/ug/STM32F4xx-PIL-example.html">Code Verification and Validation with PIL for STM32</a>).</p>
+<p>Cree el modelo <code>banco_pid.slx</code> y aplique la misma configuración de los Pasos 3 y 4. El ejemplo oficial también configura el modelo de prueba para la placa STM32.</p>
 <p>Construya dos lazos cerrados idénticos, como muestra la Figura 5. Cada lazo contiene:</p>
 <ol>
-<li>Un bloque <strong>Sum</strong> con signos <code>+-</code> que calcula el error <span class="arithmatex">\(e[k] = r[k] - y[k]\)</span>.</li>
-<li>Un bloque <strong>Model</strong> que apunta a <code>pid_ctrl</code>.</li>
-<li>Un bloque <strong>Discrete Transfer Fcn</strong> con numerador <code>[0.0952]</code>, denominador <code>[1 -0.9048]</code> y tiempo de muestreo <code>Ts</code>.</li>
+<li>Un bloque Sum con signos <code>+-</code> que calcula el error <span class="arithmatex">\(e[k] = r[k] - y[k]\)</span>.</li>
+<li>Un bloque Model que apunta a <code>pid_ctrl</code>.</li>
+<li>Un bloque Discrete Transfer Fcn con numerador <code>[0.0952]</code>, denominador <code>[1 -0.9048]</code> y tiempo de muestreo <code>Ts</code>.
+Ambos lazos comparten un bloque Step como referencia <span class="arithmatex">\(r[k]\)</span>. Agregue un bloque Subtract que reste las salidas de ambas plantas y conecte las tres señales a un Scope.</li>
 </ol>
-<p>Ambos lazos comparten un bloque <strong>Step</strong> como referencia <span class="arithmatex">\(r[k]\)</span>. Agregue un bloque <strong>Subtract</strong> que reste las salidas de ambas plantas y conecte las tres señales a un <strong>Scope</strong>.</p>
-<div class="admonition info">
-<p class="admonition-title">Figura 5 (pendiente)</p>
-<p>Captura de <code>banco_pid.slx</code> con los dos lazos, el Step compartido y el Scope.</p>
-</div>
+<p><img alt="alt text" src="../image.png" /></p>
 <h2 id="paso-6-ejecutar-la-simulacion-pil">Paso 6: Ejecutar la simulación PIL</h2>
 <p>Configure el bloque Model del primer lazo en modo PIL (<a href="https://www.mathworks.com/help/ecoder/ug/configure-and-run-pil-simulation.html">Configure and Run PIL Simulation</a>):</p>
 <ol>
-<li>Haga clic derecho sobre el bloque y seleccione <strong>Block Parameters</strong>.</li>
-<li>En <strong>Simulation mode</strong>, seleccione <code>Processor-in-the-loop (PIL)</code>.</li>
-<li>En <strong>Code interface</strong>, seleccione <code>Model reference</code>.</li>
-<li>Presione <strong>OK</strong>.</li>
+<li>Haga clic derecho sobre el bloque y seleccione Block Parameters.</li>
+<li>En Simulation mode, seleccione <code>Processor-in-the-loop (PIL)</code>.</li>
+<li>En Code interface, seleccione <code>Model reference</code>.</li>
+<li>Presione OK.
+El bloque muestra la etiqueta (PIL) en su ícono. Deje el bloque Model del segundo lazo en modo <code>Normal</code>.</li>
 </ol>
-<p>El bloque muestra la etiqueta (PIL) en su ícono (<a href="https://www.mathworks.com/help/simulink/slref/model.html">Model block</a>). Deje el bloque Model del segundo lazo en modo <code>Normal</code>.</p>
-<p>Conecte la placa y presione <strong>Run</strong>. Simulink genera el código del controlador, lo compila, lo descarga a la placa y abre la comunicación por USART3 (<a href="https://mathworks.com/help/ecoder/examples/software-and-processor-in-the-loop-sil-and-pil-simulation.html">Test Generated Code with SIL and PIL Simulations</a>).</p>
-<div class="admonition warning">
-<p class="admonition-title">Firewall de Windows</p>
-<p>El firewall de Windows puede bloquear una simulación PIL. Si aparece una alerta de seguridad, permita el acceso (<a href="https://la.mathworks.com/help/ecoder/ug/configuring-a-sil-or-pil-simulation.html">Configure and Run SIL Simulation</a>).</p>
-</div>
-<p>Durante la simulación no cierre el modelo. Para interrumpirla, presione <strong>Ctrl+C</strong> en la ventana de comandos (<a href="https://www.mathworks.com/help/ecoder/ug/configuring-a-sil-or-pil-simulation.html">Configure and Run SIL Simulation</a>).</p>
+<p>Conecte la placa y presione Run. Simulink genera el código del controlador, lo compila, lo descarga a la placa y abre la comunicación por USART3 (<a href="https://mathworks.com/help/ecoder/examples/software-and-processor-in-the-loop-sil-and-pil-simulation.html">Test Generated Code with SIL and PIL Simulations</a>).</p>
+<p><img alt="alt text" src="../image-4.png" /></p>
 <h2 id="paso-7-verificar-la-equivalencia-numerica">Paso 7: Verificar la equivalencia numérica</h2>
 <p>El Scope muestra la salida del lazo PIL, la salida del lazo Normal y la diferencia entre ambas. Si el código generado reproduce el modelo, la diferencia es cero durante toda la simulación. En las pruebas de este trabajo, la diferencia máxima entre ambos lazos fue cero.</p>
 <p>Para una comparación cuantitativa, registre ambas salidas y ábralas en el Simulation Data Inspector. El flujo automático de verificación de MathWorks usa esa misma herramienta para comparar simulaciones normales y PIL (<a href="https://www.mathworks.com/help/ecoder/ug/verification-workflow-with-silpil-manager.html">SIL/PIL Manager Verification Workflow</a>).</p>
-<div class="admonition info">
-<p class="admonition-title">Figura 6 (pendiente)</p>
-<p>Captura del Scope con ambas respuestas al escalón y la diferencia nula.</p>
-</div>
+<p><img alt="alt text" src="../image-5.png" /></p>
 <h2 id="paso-8-cambiar-las-ganancias-sin-recompilar">Paso 8: Cambiar las ganancias sin recompilar</h2>
-<p>Con <strong>Code interface</strong> en <code>Model reference</code>, Simulink permite cambiar parámetros del workspace entre simulaciones, incluso con Fast Restart activo. En cambio, no permite cambiarlos mientras la simulación corre (<a href="https://www.mathworks.com/help/ecoder/ug/sil-and-pil-simulation-limitations.html">SIL and PIL Limitations</a>).</p>
-<p>Sin Fast Restart, cambiar el valor de un <code>Simulink.Parameter</code> obliga a regenerar el código C (<a href="https://www.mathworks.com/help/ecoder/ug/sil-and-pil-simulation-limitations.html">SIL and PIL Limitations</a>). Con Fast Restart activo, después de la primera simulación el lector ajusta parámetros y repite la simulación sin recompilar (<a href="https://www.mathworks.com/help/ecoder/ug/configure-and-run-pil-simulation.html">Configure and Run PIL Simulation</a>).</p>
+<p>Con Code interface en <code>Model reference</code>, Simulink permite cambiar parámetros del workspace entre simulaciones, incluso con Fast Restart activo. En cambio, no permite cambiarlos mientras la simulación corre.</p>
+<p>Sin Fast Restart, cambiar el valor de un <code>Simulink.Parameter</code> obliga a regenerar el código C. Con Fast Restart activo, después de la primera simulación el lector ajusta parámetros y repite la simulación sin recompilar.</p>
 <p>Para cambiar una ganancia:</p>
 <ol>
-<li>Active <strong>Fast Restart</strong> en la barra de herramientas de Simulink (<a href="https://www.mathworks.com/help/simulink/ug/fast-restart-workflow.html">Get Started with Fast Restart</a>).</li>
+<li>Active Fast Restart en la barra de herramientas de Simulink.</li>
 <li>Ejecute la simulación. La primera ejecución compila el código y lo descarga a la placa.</li>
 <li>En la ventana de comandos, cambie el valor de la ganancia, por ejemplo <code>Kp.Value = 1.0;</code>.</li>
-<li>Ejecute de nuevo la simulación. Simulink aplica el nuevo valor sin compilar el modelo (<a href="https://www.mathworks.com/help/simulink/ug/fast-restart-workflow.html">Get Started with Fast Restart</a>).</li>
-<li>Compare ambas respuestas en el Simulation Data Inspector.</li>
+<li>Ejecute de nuevo la simulación. Simulink aplica el nuevo valor sin compilar el modelo.</li>
+<li>Compare ambas respuestas en el Simulation Data Inspector.
+Con Fast Restart activo, el lector no puede cambiar el periodo de muestreo, modificar la estructura del modelo ni guardar cambios. Para cualquiera de esas acciones, desactive Fast Restart (<a href="https://uk.mathworks.com/help/simulink/ug/how-fast-restart-improves-iterative-simulations.html">How Fast Restart Improves Iterative Simulations</a>).</li>
 </ol>
-<p>Con Fast Restart activo, el lector no puede cambiar el periodo de muestreo, modificar la estructura del modelo ni guardar cambios. Para cualquiera de esas acciones, desactive Fast Restart (<a href="https://www.mathworks.com/help/simulink/ug/fast-restart-workflow.html">Get Started with Fast Restart</a>; <a href="https://uk.mathworks.com/help/simulink/ug/how-fast-restart-improves-iterative-simulations.html">How Fast Restart Improves Iterative Simulations</a>).</p>
-<div class="admonition note">
-<p class="admonition-title">Cambio de parámetros durante la simulación</p>
-<p>Si <strong>Code interface</strong> se configura en <code>Top model</code>, Simulink permite cambiar parámetros mientras la simulación corre. Con esa opción, un cambio entre simulaciones genera código nuevo para la siguiente ejecución (<a href="https://www.mathworks.com/help/ecoder/ug/sil-and-pil-simulation-limitations.html">SIL and PIL Limitations</a>).</p>
-</div>
-<div class="admonition info">
-<p class="admonition-title">Figura 7 (pendiente)</p>
-<p>Captura del Simulation Data Inspector con las respuestas para <span class="arithmatex">\(K_p = 0.5\)</span> y <span class="arithmatex">\(K_p = 1.0\)</span>.</p>
-</div>
 <p>Al completar esta guía, el lector cuenta con un controlador PID verificado en la NUCLEO-F767ZI mediante PIL, con ganancias ajustables sin recompilar. La guía siguiente replicará el mismo procedimiento sobre una Raspberry Pi 5.</p>
 
 
