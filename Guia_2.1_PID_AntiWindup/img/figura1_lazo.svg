@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 480" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#222">
+  <title>Lazo de control con PID, saturación y anti-windup por back-calculation</title>
+  <defs>
+    <marker id="flecha" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#222"/>
+    </marker>
+  </defs>
+  <rect width="1120" height="480" fill="#fff"/>
+
+  <!-- Particion -->
+  <g fill="none" stroke="#777" stroke-width="1.5" stroke-dasharray="7 6">
+    <rect x="120" y="82" width="660" height="312" rx="6"/>
+    <rect x="805" y="82" width="190" height="178" rx="6"/>
+  </g>
+  <g font-size="18" fill="#555">
+    <text x="132" y="108">Placa (pid_aw_ctrl)</text>
+    <text x="817" y="108">Computador</text>
+  </g>
+
+  <!-- Bloques -->
+  <g fill="#fff" stroke="#222" stroke-width="2.5">
+    <rect x="265" y="130" width="150" height="80"/>
+    <rect x="530" y="130" width="150" height="80"/>
+    <rect x="825" y="130" width="150" height="80"/>
+    <rect x="410" y="325" width="90" height="50"/>
+    <circle cx="180" cy="170" r="22"/>
+    <circle cx="605" cy="285" r="22"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="340" y="178">PID</text>
+    <text x="605" y="178">Saturación</text>
+    <text x="900" y="178">Planta G(z)</text>
+    <text x="448" y="358">K<tspan font-size="16" dy="5">b</tspan></text>
+  </g>
+
+  <!-- Camino directo -->
+  <g fill="none" stroke="#222" stroke-width="2.5">
+    <path d="M40,170 H156" marker-end="url(#flecha)"/>
+    <path d="M202,170 H263" marker-end="url(#flecha)"/>
+    <path d="M415,170 H528" marker-end="url(#flecha)"/>
+    <path d="M680,170 H823" marker-end="url(#flecha)"/>
+    <path d="M975,170 H1090" marker-end="url(#flecha)"/>
+    <!-- Realimentacion de la medicion -->
+    <path d="M1035,170 V440 H180 V194" marker-end="url(#flecha)"/>
+    <!-- Parametros -->
+    <path d="M340,40 V128" marker-end="url(#flecha)"/>
+    <!-- Anti-windup -->
+    <path d="M480,170 V285 H581" marker-end="url(#flecha)"/>
+    <path d="M730,170 V285 H629" marker-end="url(#flecha)"/>
+    <path d="M605,307 V350 H502" marker-end="url(#flecha)"/>
+    <path d="M410,350 H340 V212" marker-end="url(#flecha)"/>
+  </g>
+  <g fill="#222">
+    <circle cx="480" cy="170" r="5"/>
+    <circle cx="730" cy="170" r="5"/>
+    <circle cx="1035" cy="170" r="5"/>
+  </g>
+
+  <!-- Etiquetas -->
+  <text x="60" y="155">r[k]</text>
+  <text x="212" y="155">e[k]</text>
+  <text x="430" y="155">v[k]</text>
+  <text x="738" y="155">u[k]</text>
+  <text x="1050" y="155">y[k]</text>
+  <text x="352" y="60">p</text>
+  <text x="618" y="340">u[k] − v[k]</text>
+  <g font-size="26">
+    <text x="146" y="158">+</text>
+    <text x="154" y="218">−</text>
+    <text x="559" y="273">−</text>
+    <text x="636" y="273">+</text>
+  </g>
+</svg>
