@@ -2,104 +2,76 @@
  
 ## Objetivo
  
-Para esta etapa se configura el modelo de Simulink para ejecutar PIL en la **NUCLEO-F767ZI** y en la **Raspberry Pi 5**. La configuración se hace una sola vez por modelo e indica cómo se genera el código, para qué placa y como se comunica con el computador.
+Para esta etapa se configura el modelo de Simulink para ejecutar PIL en la **STM32 Nucleo F767ZI** y en la **Raspberry Pi 5**. La configuración se hace una sola vez por modelo e indica para qué placa y con qué herramientas se genera el código, y cómo se comunica con el computador.
  
 ## Contexto
  
-Con las herramientas de la Guía 1 instaladas, falta configurar a Simulink con qué placa trabajar y cómo conectarse a ella. Esa información se ingresa en el cuadro *Configuration Parameters* del modelo, que se abre con Ctrl+E.
+Con las herramientas de la Guía 1 instaladas, falta indicarle a Simulink con qué placa trabajar y cómo conectarse a ella. Esa información se ingresa en el cuadro **Configuration Parameters** del modelo, que se abre con Ctrl+E.
  
-Lo que cambia entre las plataformas es el canal de comunicación: la NUCLEO usa un puerto serial y la Raspberry Pi usa la red (TCP/IP). Para la STM32 hay dos configuraciones. Si la placa tiene soporte, todo se configura en Simulink sin abrir STM32CubeMX. Si no lo tiene, además hay que crear y configurar un proyecto de STM32CubeMX que el modelo importa ([Configure STM32 Boards using STM32CubeMX with Simulink](https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/STM32-CubeMX-Configuration.html)). Para la Raspberry Pi hay una sola configuración.
+Lo que cambia entre las plataformas es el canal de comunicación: la STM32 usa un puerto serial y la Raspberry Pi usa la red (TCP/IP). Estas guías solo cubren placas con soporte, como la STM32 Nucleo F767ZI, que se configuran directamente en Simulink. Las placas STM32 sin soporte tienen otra opción de configuración, mediante un proyecto de STM32CubeMX, que no se aborda aquí ([Configure STM32 Boards using STM32CubeMX with Simulink](https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/STM32-CubeMX-Configuration.html)).
  
 
 
 ## Paso previo: solver del modelo
  
-Para generar y verificar código, el modelo debe usar un solver de paso fijo, porque el código generado solo admite ese tipo de solver. Además, el controlador solo tiene estados discretos, por lo que el solver `discrete (no continuous states)` es el adecuado.
+Para generar y verificar código, el modelo debe usar un solver de paso fijo, porque el código generado solo admite ese tipo de solver. El solver se deja en automático, para que Simulink lo elija según el modelo.
  
-En *Configuration Parameters*, sección *Solver*, se configura:
+En **Configuration Parameters**, sección **Solver**, se configura:
+ 
+*Tabla 1: Configuración del solver.*
  
 | Parámetro       | Valor                             |
 | --------------- | --------------------------------- |
 | Type            | `Fixed-step`                      |
-| Solver          | `discrete (no continuous states)` |
+| Solver          | `auto (Automatic solver selection)` |
+| Fixed-step size | `auto`                            |
 
  
-El valor por defecto de *Fixed-step size* es `auto`, que elige un paso que cubra todos los tiempos de muestreo del modelo ([Fixed-step size](https://www.mathworks.com/help/simulink/gui/fixedstepsizefundamentalsampletime.html))
+**Fixed-step size** se deja en `auto`, su valor por defecto, que elige un paso que cubra todos los tiempos de muestreo del modelo ([Fixed-step size](https://www.mathworks.com/help/simulink/gui/fixedstepsizefundamentalsampletime.html)).
  
-![alt text](image-2.png)
+![Configuración del solver en Configuration Parameters](img/image-2.png)
  
 ## Configuración 1: STM32 con soporte
  
-Es el caso de la NUCLEO-F767ZI: Simulink la reconoce por nombre, por lo que solo hay que elegir la placa e indicar cómo se comunica con el computador. Ambas cosas se hacen en *Configuration Parameters*, sección *Hardware Implementation*.
+Es el caso de la STM32 Nucleo F767ZI: Simulink la reconoce por nombre, por lo que solo hay que elegir la placa, indicar cómo se comunica con el computador y seleccionar las opciones de generación de código. Todo se hace en **Configuration Parameters**: las dos primeras en la sección **Hardware Implementation** y la última en **Code Generation**.
  
 ### Paso 1: Seleccionar la placa
  
-Lo primero es indicar para qué placa se generará el código. Despliega **Hardware Implementation > Hardware board** y selecciona la entrada de la NUCLEO-F767ZI. Al elegirla, aparecen debajo los parámetros propios de la placa, entre ellos *Target hardware resources*, que se usa en el paso siguiente.
+Lo primero es indicar para qué placa se generará el código. Despliega **Hardware Implementation > Hardware board** y selecciona *STM32 Nucleo F767ZI*. Al elegirla, aparecen debajo los parámetros propios de la placa, entre ellos **Target hardware resources**, que se usa en el paso siguiente.
  
-![alt text](image-6.png)
+![Selección de STM32 Nucleo F767ZI en Hardware board](img/image-6.png)
  
 ### Paso 2: Configurar la comunicación
  
-En PIL, el modelo se comunica con la placa por un puerto serial: el computador ve la placa como un puerto COM y la placa usa un periférico llamado USART. El modelo necesita conocer ambos.
+En PIL, el modelo se comunica con la placa por un puerto serial: el computador ve la placa como un puerto COM, y el modelo necesita saber cuál es.
  
-Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en *Puertos (COM y LPT)*. Luego, en *Hardware Implementation > Target hardware resources*, selecciona *External mode* y, en *Communication interface*, elige *Serial*. En *Connectivity*, selecciona el USART3 e indica el COM Port anotado. En la NUCLEO-F767ZI se usa el USART3 porque el ST-LINK expone un puerto COM virtual hacia el computador, conectado internamente a ese periférico en los pines PD8 y PD9 ([UM1974, manual de las placas Nucleo-144](https://www.st.com/resource/en/user_manual/dm00244518.pdf)).
+Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en *Puertos (COM y LPT)*. Luego, en **Hardware Implementation > Target hardware resources**, entra a la pestaña **PIL**. En **PIL communication interface**, elige **Serial** y, en **Serial port**, escribe el COM anotado.
  
-![alt text](image-8.png)
+![Pestaña PIL con la interfaz Serial y el puerto COM3](img/image-8.png)
  
-## Configuración 2: STM32 sin soporte
+Indica también el mismo COM en la pestaña **External mode**.
  
-Algunas placas no aparecen por nombre en la lista de Simulink, aunque su microcontrolador sí pertenezca a una serie soportada. Como Simulink no conoce la placa, el USART y sus pines deben configurarse a mano en un proyecto de STM32CubeMX, y el modelo importa ese proyecto. Aquí se parte con el solver del paso previo.
+### Paso 3: Seleccionar el System target file y la toolchain
  
-### Paso 1: Seleccionar la serie
+Para poder usar PIL, en **Code Generation > System target file** selecciona `ert.tlc`, que corresponde a Embedded Coder.
  
-En vez de una placa, se elige una opción genérica de la serie del microcontrolador. En **Hardware Implementation > Hardware board**, elige la opción custom de tu serie (en la serie F4xx, la documentación la llama *custom STM32F4xx Based hardware*).
+La toolchain es el compilador que Simulink usa para construir el código generado. En **Code Generation > Toolchain**, selecciona **GNU Tools for ARM Embedded Processors**, la que instaló el asistente en la Guía 1.
  
-
+![STM32 Nucleo F767ZI con ert.tlc como System target file](img/image-1.png)
  
-### Paso 2: Crear el proyecto de STM32CubeMX
+## Configuración 2: Raspberry Pi 5
  
-STM32CubeMX es la herramienta donde se configuran los periféricos del microcontrolador, y el modelo la recibe como un proyecto con extensión `.ioc`. En este paso se crea ese proyecto y se abre.
- 
-En *Build options*, usa *Browse* si ya tienes un proyecto `.ioc`, o *Create* para crear uno nuevo: escribe el nombre con extensión `.ioc`, elige la carpeta, selecciona el microcontrolador de tu placa y confirma con *Apply* y *OK*. Luego presiona *Launch* para abrirlo en STM32CubeMX.
- 
-
- 
-### Paso 3: Configurar el reloj, los pines y el USART
- 
-Un proyecto creado solo desde el microcontrolador parte sin pines asignados. Antes de configurar el USART hay que resolver el reloj y los pines.
- 
-En *Clock Configuration*, ajusta el reloj del sistema. En *Pinout & Configuration*, asigna los pines TX y RX del USART elegido, haciendo clic sobre ellos en el diagrama del encapsulado; los pines conectados al ST-LINK están indicados en el esquemático de la placa. Después configura el USART con los valores de la Tabla 1 y guarda el proyecto ([Serial Configuration for Monitor & Tune and PIL](https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/External-mode-PIL.html)).
- 
-*Tabla 1: Configuración del USART en STM32CubeMX.*
- 
-| Parámetro | Valor |
-| --- | --- |
-| Mode | Asynchronous. |
-| Baud Rate | El que usará el modelo; anótalo. |
-| DMA Settings | Solicitud DMA para la recepción del USART. |
- 
-*[Agregar imagen: vista Pinout & Configuration con los pines TX y RX asignados.]*
- 
-### Paso 4: Configurar la comunicación en el modelo
- 
-Con el proyecto listo, falta indicarle al modelo el puerto del computador y el USART elegido. Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en *Puertos (COM y LPT)*.
- 
-En *Hardware Implementation > Target hardware resources*, selecciona *External mode* y, en *Communication interface*, elige *Serial*. En *Connectivity*, selecciona el USART configurado en el paso anterior e indica el COM Port. El baud rate debe coincidir con el del proyecto de STM32CubeMX.
-
- 
-## Configuración 3: Raspberry Pi 5
- 
-La Raspberry Pi 5 es un computador con Linux, por lo que no se configuran periféricos ni pines. Simulink se conecta a ella por red, usando la dirección y las credenciales de su Linux, y esos datos se ingresan en la configuración del modelo ([Model Configuration Simulink Support Package for Raspberry Pi Hardware](https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html)). La placa debe estar encendida y en la misma red que el computador. Aquí también se parte con el solver del paso previo.
+La Raspberry Pi 5 es un computador con Linux, por lo que no se configuran periféricos ni pines. Simulink se conecta a ella por red, usando la dirección y las credenciales de su Linux, y esos datos se ingresan en la configuración del modelo ([Model Configuration Simulink Support Package for Raspberry Pi Hardware](https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html)). La placa debe estar encendida y, por conveniencia, en la misma red que el computador. Aquí también se parte con el solver del paso previo.
  
 ### Paso 1: Seleccionar la placa
  
-Igual que en la STM32, se indica para qué placa se genera el código. En **Hardware Implementation > Hardware board**, selecciona *Raspberry Pi*. Esto carga los parámetros por defecto de la placa, que se completan en el paso siguiente.
+Igual que en la STM32, se indica para qué placa se genera el código. En **Hardware Implementation > Hardware board**, selecciona *Raspberry Pi (64bit)*. Esto carga los parámetros por defecto de la placa, que se completan en el paso siguiente.
  
-![alt text](image-9.png)
+![Selección de Raspberry Pi (64bit) en Hardware board](img/image-9.png)
  
 ### Paso 2: Completar los parámetros de conexión
  
-Con la placa seleccionada aparecen sus parámetros. Cuatro de ellos son los que Simulink usa para encontrar la Raspberry y acceder a su Linux; complétalos con los valores de la Tabla 2.
+Con la placa seleccionada aparecen sus parámetros. Para que Simulink se comunique con la Raspberry hay que modificar tres de ellos, en **Target hardware resources > Board Parameters**, con el botón **Edit**. Con estos datos queda configurada indirectamente la comunicación por TCP/IP.
  
 *Tabla 2: Parámetros de conexión con la Raspberry Pi.*
  
@@ -109,16 +81,14 @@ Con la placa seleccionada aparecen sus parámetros. Cuatro de ellos son los que 
 | Username | Usuario de Linux de la placa. |
 | Password | Contraseña de ese usuario. |
  
-Para confirmar lo registrado, ejecuta `raspberrypi` en la Command Window: devuelve el nombre de host, el usuario, la contraseña y el directorio de compilación de la última conexión exitosa ([raspberrypi](https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi.html)).
+![Parámetros de conexión de la Raspberry Pi en Board Parameters](img/image-10.png)
  
-![alt text](image-10.png)
+### Paso 3: Seleccionar el System target file y la toolchain
  
-### Paso 3: Revisar la toolchain
+Igual que en la STM32, en **Code Generation > System target file** selecciona `ert.tlc`. En **Code Generation > Toolchain**, selecciona **GNU GCC Embedded Linux**.
  
-La toolchain es el compilador que Simulink usa para construir el código generado. Para la Raspberry debe estar seleccionada **GNU GCC Embedded Linux**, que es la que usa el ejemplo oficial de PIL con Raspberry Pi citado en el paso previo. La opción está en *Code Generation > Toolchain*.
- 
-![alt text](image-11.png)
+![System target file y toolchain GNU GCC Embedded Linux en Code Generation](img/image-11.png)
  
 ## Validación
  
-Si el modelo tiene el solver de paso fijo, la placa seleccionada y los parámetros de comunicación completos, la configuración está lista. Guarda el modelo.
+Si el modelo tiene el solver de paso fijo, la placa seleccionada, los parámetros de comunicación completos, `ert.tlc` como System target file y la toolchain de la placa seleccionada, la configuración está lista. Guarda el modelo.

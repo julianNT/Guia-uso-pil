@@ -1,0 +1,979 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../Guia_1.2_Configuracion/Guia_1_2/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Guía 2.1 - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guia-21-controlador-pid-con-anti-windup-con-pil-en-stm32-nucleo-f767zi" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-header__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Guía 2.1
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-nav__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_1_Instalacion/Guia_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_1.2_Configuracion/Guia_1_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 1.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 2.1
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caso-de-estudio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso de estudio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Caso de estudio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-problema-del-windup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El problema del windup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-definir-los-parametros-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Definir los parámetros del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-crear-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Crear el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-configurar-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Configurar el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-configurar-la-comunicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Configurar la comunicación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-crear-el-modelo-de-prueba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 5: Crear el modelo de prueba
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-ejecutar-la-simulacion-pil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 6: Ejecutar la simulación PIL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-7-verificar-la-equivalencia-numerica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 7: Verificar la equivalencia numérica
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caso-de-estudio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso de estudio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Caso de estudio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-problema-del-windup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El problema del windup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-definir-los-parametros-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Definir los parámetros del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-crear-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Crear el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-configurar-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Configurar el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-configurar-la-comunicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Configurar la comunicación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-crear-el-modelo-de-prueba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 5: Crear el modelo de prueba
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-ejecutar-la-simulacion-pil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 6: Ejecutar la simulación PIL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-7-verificar-la-equivalencia-numerica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 7: Verificar la equivalencia numérica
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="guia-21-controlador-pid-con-anti-windup-con-pil-en-stm32-nucleo-f767zi">Guía 2.1: Controlador PID con anti-windup con PIL en STM32 Nucleo F767ZI</h1>
+<h2 id="objetivo">Objetivo</h2>
+<p>En esta guía el lector implementa un controlador PID discreto con anti-windup, escrito en C, y lo ejecuta en la STM32 Nucleo F767ZI mediante PIL. Luego verifica que el código ejecutado en la placa reproduce la simulación en el computador.</p>
+<h2 id="contexto">Contexto</h2>
+<p>La guía utiliza PIL mediante el bloque Model de Simulink. En modo PIL, el bloque Model genera código del modelo referenciado, lo compila para la plataforma objetivo y lo ejecuta en ella (<a href="https://www.mathworks.com/help/simulink/slref/model.html">Model</a>). Durante la simulación, el computador y la placa intercambian datos en cada paso de tiempo.</p>
+<p>La guía usa dos modelos de Simulink. El modelo del controlador, <code>pid_aw_ctrl.slx</code>, se ejecuta en la placa. El modelo de prueba, <code>pid_aw_lazo.slx</code>, contiene la planta y se ejecuta en el computador. El controlador recibe la referencia y la medición por separado y calcula el error dentro de la placa.</p>
+<p><img alt="Lazo de control con PID, saturación y anti-windup, dividido entre la placa y el computador" src="../img/figura1_lazo.svg" /></p>
+<p><em>Figura 1: Partición del lazo de control con anti-windup en la simulación PIL.</em></p>
+<p>El controlador se escribe en C y se integra con un bloque C Function, que permite llamar código externo desde un modelo y generar código a partir de él (<a href="https://www.mathworks.com/help/simulink/slref/cfunction.html">C Function</a>).</p>
+<h2 id="caso-de-estudio">Caso de estudio</h2>
+<h3 id="planta">Planta</h3>
+<p>La planta es un sistema de primer orden con ganancia unitaria y constante de tiempo <span class="arithmatex">\(\tau = 10\ \text{ms}\)</span>, que aproxima un motor DC. El periodo de muestreo es <span class="arithmatex">\(T_s = 1\ \text{ms}\)</span>. Discretizada con retenedor de orden cero, su función de transferencia es la Ecuación 1.</p>
+<div class="arithmatex">\[
+G(z) = \frac{b_d}{z - a_d}, \quad a_d = e^{-T_s/\tau} = 0.9048, \quad b_d = 1 - a_d = 0.0952 \tag{1}
+\]</div>
+<h3 id="el-problema-del-windup">El problema del windup</h3>
+<p>Todo actuador tiene un límite. Cuando el controlador pide más de lo que el actuador puede entregar, la señal que llega a la planta queda fija en ese límite, pero el integrador sigue acumulando el error. Su estado crece sin que eso tenga efecto sobre la planta. Cuando la referencia cambia, el controlador primero debe descargar lo acumulado, y por eso la respuesta se retrasa. A este fenómeno se le llama windup.</p>
+<h3 id="controlador">Controlador</h3>
+<p>El controlador es un PID paralelo con derivada filtrada, saturación y anti-windup por back-calculation. Este método realimenta al integrador la diferencia entre la señal saturada y la señal sin saturar (<a href="https://www.mathworks.com/help/simulink/slref/discretepidcontroller.html">Discrete PID Controller</a>). En tiempo continuo, el controlador y su integrador se describen con la Ecuación 2.</p>
+<div class="arithmatex">\[
+C(s) = K_p + \frac{K_i}{s} + \frac{K_d\, s}{T_f s + 1}, \quad \dot{I} = K_i e + K_b (u - v) \tag{2}
+\]</div>
+<p>Aquí <span class="arithmatex">\(v\)</span> es la señal de control sin saturar, <span class="arithmatex">\(u\)</span> es la señal saturada que llega a la planta y <span class="arithmatex">\(K_b\)</span> es la ganancia de anti-windup. Su inverso, <span class="arithmatex">\(1/K_b\)</span>, es la constante de tiempo con que el integrador se descarga. Mientras no hay saturación, <span class="arithmatex">\(u = v\)</span>, el término de anti-windup vale cero y el controlador se comporta como un PID normal.</p>
+<p>Al discretizar con Forward Euler se obtienen las Ecuaciones 3 a 7, donde <span class="arithmatex">\(x_f\)</span> es el estado del filtro de la derivada.</p>
+<div class="arithmatex">\[
+e[k] = r[k] - y[k] \tag{3}
+\]</div>
+<div class="arithmatex">\[
+v[k] = K_p\, e[k] + I[k] + \frac{K_d}{T_f}\left(e[k] - x_f[k]\right) \tag{4}
+\]</div>
+<div class="arithmatex">\[
+u[k] = \min\left(\max\left(v[k],\ u_{min}\right),\ u_{max}\right) \tag{5}
+\]</div>
+<div class="arithmatex">\[
+I[k+1] = I[k] + T_s \left(K_i\, e[k] + K_b \left(u[k] - v[k]\right)\right) \tag{6}
+\]</div>
+<div class="arithmatex">\[
+x_f[k+1] = x_f[k] + \frac{T_s}{T_f}\left(e[k] - x_f[k]\right) \tag{7}
+\]</div>
+<h2 id="paso-1-definir-los-parametros-del-controlador">Paso 1: Definir los parámetros del controlador</h2>
+<p>Los parámetros no se escriben dentro del controlador. Se entregan como un vector de 8 elementos que entra por un puerto del modelo, con el orden de la Tabla 1. Como sus valores viajan desde el computador en cada paso, cambiarlos no modifica el código que corre en la placa.</p>
+<p><em>Tabla 1: Vector de parámetros p.</em></p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p[0]</td>
+<td>Kp</td>
+<td>0.5</td>
+<td>Ganancia proporcional</td>
+</tr>
+<tr>
+<td>p[1]</td>
+<td>Ki</td>
+<td>10</td>
+<td>Ganancia integral</td>
+</tr>
+<tr>
+<td>p[2]</td>
+<td>Kd</td>
+<td>0.002</td>
+<td>Ganancia derivativa</td>
+</tr>
+<tr>
+<td>p[3]</td>
+<td>Tf</td>
+<td>0.002</td>
+<td>Constante del filtro derivativo</td>
+</tr>
+<tr>
+<td>p[4]</td>
+<td>Kb</td>
+<td>20</td>
+<td>Ganancia de anti-windup</td>
+</tr>
+<tr>
+<td>p[5]</td>
+<td>Ts</td>
+<td>Ts</td>
+<td>Periodo de muestreo</td>
+</tr>
+<tr>
+<td>p[6]</td>
+<td>umin</td>
+<td>-1.5</td>
+<td>Límite inferior de la señal</td>
+</tr>
+<tr>
+<td>p[7]</td>
+<td>umax</td>
+<td>1.5</td>
+<td>Límite superior de la señal</td>
+</tr>
+</tbody>
+</table>
+<p>El periodo de muestreo y los coeficientes de la planta se definen como variables del workspace. Para que se carguen al abrir los modelos, se escriben en el callback PreLoadFcn de cada uno: <code>Ts</code> y <code>tau</code>, con los valores del caso de estudio, y <code>ad</code> y <code>bd</code>, calculados como en la Ecuación 1.</p>
+<h2 id="paso-2-crear-el-modelo-del-controlador">Paso 2: Crear el modelo del controlador</h2>
+<p>Cree una carpeta de trabajo y escriba en ella el código del controlador, en los archivos <code>pid_aw.c</code> y <code>pid_aw.h</code>. El código tiene dos funciones:</p>
+<ul>
+<li><code>pid_aw_init</code> deja en cero los estados <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(x_f\)</span>.</li>
+<li><code>pid_aw_step</code> recibe <span class="arithmatex">\(r\)</span>, <span class="arithmatex">\(y\)</span> y el vector <code>p</code>, calcula las Ecuaciones 3 a 5 y actualiza los estados con las Ecuaciones 6 y 7. Devuelve <span class="arithmatex">\(u\)</span> y entrega <span class="arithmatex">\(v\)</span> mediante un puntero.</li>
+</ul>
+<p>Los estados se guardan como variables estáticas, para que conserven su valor entre una llamada y la siguiente.</p>
+<p>El archivo <code>pid_aw.h</code> declara las funciones:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifndef PID_AW_H</span>
+<span class="cp">#define PID_AW_H</span>
+
+<span class="kt">void</span><span class="w">   </span><span class="nf">pid_aw_init</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w">                                     </span><span class="cm">/* estados en cero: I = 0, xf = 0                */</span>
+<span class="kt">double</span><span class="w"> </span><span class="nf">pid_aw_step</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">,</span><span class="kt">double</span><span class="o">*</span><span class="n">v</span><span class="p">);</span><span class="w">                                </span><span class="cm">/* devuelve u_sat[k]; *v = u[k] sin saturar      */</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p>El archivo <code>pid_aw.c</code> las implementa:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"pid_aw.h"</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">I</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span><span class="w">   </span><span class="cm">/* integrador          I[k]   */</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">xf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span><span class="w">   </span><span class="cm">/* filtro derivativo   xf[k]  */</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">pid_aw_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">I</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">xf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">pid_aw_step</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">Kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">Ki</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">Kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">Tf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">Kb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="n">Ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="w"> </span><span class="n">umin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="n">umax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>
+
+<span class="w">    </span><span class="cm">/* 1) error */</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* 2) salida con los estados en k:  D[k] = Kd/Tf (e[k] - xf[k]),  u[k] = Kp e[k] + I[k] + D[k] */</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Kd</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Tf</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xf</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Kp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">D</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* 3) saturacion */</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">us</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">us</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">umax</span><span class="p">)</span><span class="w"> </span><span class="n">us</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">umax</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">us</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">umin</span><span class="p">)</span><span class="w"> </span><span class="n">us</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">umin</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* 4) actualizacion Forward Euler de los estados a k+1 */</span>
+<span class="w">    </span><span class="n">I</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="w">  </span><span class="o">+</span><span class="w"> </span><span class="n">Ts</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">Ki</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Kb</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">us</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">u</span><span class="p">));</span><span class="w">     </span><span class="cm">/* back-calculation      */</span>
+<span class="w">    </span><span class="n">xf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">Ts</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Tf</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xf</span><span class="p">);</span><span class="w">              </span><span class="cm">/* filtro de la derivada */</span>
+
+<span class="w">    </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">us</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Dentro de <code>pid_aw_step</code>, la variable <code>u</code> es la señal sin saturar y <code>us</code> la saturada. En el modelo, y en las Ecuaciones 4 y 5, <span class="arithmatex">\(v\)</span> es la señal sin saturar y <span class="arithmatex">\(u\)</span> la saturada.</p>
+<p>Cree un modelo nuevo llamado <code>pid_aw_ctrl.slx</code> en la misma carpeta. Tiene tres entradas, <code>r</code>, <code>y</code> y <code>p</code>, conectadas a un bloque C Function, y dos salidas, <code>u</code> y <code>v</code>, como muestra la Figura 2. La entrada <code>p</code> es un vector de 8 elementos y todo el modelo trabaja con el periodo <code>Ts</code>.</p>
+<p><img alt="Modelo pid_aw_ctrl con las entradas r, y, p, el bloque C Function y las salidas u, v" src="../img/figura2_modelo_ctrl.png" /></p>
+<p><em>Figura 2: Modelo del controlador pid_aw_ctrl.</em></p>
+<p>El bloque C Function conecta el modelo con el código en C. Al inicio llama a <code>pid_aw_init</code> y en cada paso llama a <code>pid_aw_step</code>. Estas llamadas se escriben tanto en la sección de simulación como en la de generación de código del bloque. La ubicación del código propio se deja en Configuration Parameters, porque los archivos se indican en el Paso 3.</p>
+<p><img alt="Ventana del bloque C Function con la llamada a pid_aw_step" src="../img/figura3_cfuntion.png" /></p>
+<p><em>Figura 3: Configuración del bloque C Function.</em></p>
+<h2 id="paso-3-configurar-el-modelo-del-controlador">Paso 3: Configurar el modelo del controlador</h2>
+<p>Configure el solver, la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_1.2_Configuracion/Guia_1_2/">Guía 1.2</a>. Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.</p>
+<p><em>Tabla 2: Configuración adicional del modelo pid_aw_ctrl.</em></p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model Referencing</td>
+<td>Total number of instances allowed per top model</td>
+<td>One</td>
+</tr>
+<tr>
+<td>Model Referencing</td>
+<td>Include custom code for referenced models</td>
+<td>Marcado</td>
+</tr>
+<tr>
+<td>Simulation Target y Code Generation &gt; Custom Code</td>
+<td>Include headers</td>
+<td><code>#include "pid_aw.h"</code></td>
+</tr>
+<tr>
+<td>Simulation Target y Code Generation &gt; Custom Code</td>
+<td>Include directories</td>
+<td>Carpeta de trabajo</td>
+</tr>
+<tr>
+<td>Simulation Target y Code Generation &gt; Custom Code</td>
+<td>Source files</td>
+<td>Ruta de <code>pid_aw.c</code></td>
+</tr>
+</tbody>
+</table>
+<p>El código propio se indica dos veces porque Simulation Target lo usa al simular en el computador y Custom Code lo usa al generar el código para la placa.</p>
+<h2 id="paso-4-configurar-la-comunicacion">Paso 4: Configurar la comunicación</h2>
+<p>En cada paso, el computador envía a la placa la referencia <span class="arithmatex">\(r[k]\)</span>, la medición <span class="arithmatex">\(y[k]\)</span> y el vector de parámetros, y recibe de vuelta las señales <span class="arithmatex">\(u[k]\)</span> y <span class="arithmatex">\(v[k]\)</span> (Figura 1). Este intercambio ocurre por el puerto serial.</p>
+<p>Configure el puerto como se explica en la Guía 1.2: en <strong>Hardware Implementation &gt; Target hardware resources &gt; PIL</strong>, elija <strong>Serial</strong> en <strong>PIL communication interface</strong> y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.</p>
+<h2 id="paso-5-crear-el-modelo-de-prueba">Paso 5: Crear el modelo de prueba</h2>
+<p>Cree el modelo <code>pid_aw_lazo.slx</code> en la misma carpeta, con los parámetros del Paso 1, cada uno en un bloque Constant, y utilice la configuración de la Guía 1.2. No necesita las opciones de la Tabla 2. La Figura 4 muestra el lazo cerrado que contiene.</p>
+<p>Un generador de pulsos entrega la referencia, que sube a 1 y vuelve a 0 de forma periódica. Un grupo de constantes guarda los valores de la Tabla 1 y los reúne en el vector <code>p</code>. El bloque Model llama al controlador <code>pid_aw_ctrl</code>, que recibe la referencia, la medición y ese vector. La señal saturada <span class="arithmatex">\(u\)</span> entra a la planta de la Ecuación 1, y su salida <span class="arithmatex">\(y\)</span> vuelve al controlador como medición. Dos Scope muestran la respuesta del lazo y las señales de control, y las señales <span class="arithmatex">\(u\)</span>, <span class="arithmatex">\(v\)</span> e <span class="arithmatex">\(y\)</span> quedan registradas para revisarlas en el Simulation Data Inspector.</p>
+<p><img alt="Modelo pid_aw_lazo con el bloque Model en modo PIL, las constantes de p y la planta" src="../img/figure4_modelo_lazo.png" /></p>
+<p><em>Figura 4: Modelo de prueba pid_aw_lazo.</em></p>
+<h2 id="paso-6-ejecutar-la-simulacion-pil">Paso 6: Ejecutar la simulación PIL</h2>
+<p>Configure el bloque Model en modo PIL:</p>
+<ol>
+<li>Haga clic derecho sobre el bloque y seleccione Block Parameters.</li>
+<li>En Simulation mode, seleccione Processor-in-the-loop (PIL).</li>
+<li>En Code interface, seleccione Model reference.</li>
+<li>Presione OK.</li>
+</ol>
+<p>El bloque muestra la etiqueta (PIL) en su ícono.</p>
+<p>Conecte la placa y presione Run. Simulink genera el código del controlador, lo compila junto con <code>pid_aw.c</code>, lo descarga a la placa y abre la comunicación por el puerto serial.</p>
+<p><img alt="Referencia r y salida y del lazo en la simulación PIL" src="../img/figure5_respuesta_pil.png" /></p>
+<p><em>Figura 5: Respuesta del lazo en la simulación PIL.</em></p>
+<h2 id="paso-7-verificar-la-equivalencia-numerica">Paso 7: Verificar la equivalencia numérica</h2>
+<p>Como el controlador admite una sola instancia, no se pueden tener dos lazos en paralelo con el mismo controlador. La comparación se hace con dos ejecuciones del mismo modelo:</p>
+<ol>
+<li>Ejecute la simulación en modo PIL, como en el Paso 6.</li>
+<li>Cambie el Simulation mode del bloque Model a Normal y ejecute de nuevo.</li>
+<li>Abra el Simulation Data Inspector y compare ambas ejecuciones en las señales <span class="arithmatex">\(u\)</span>, <span class="arithmatex">\(v\)</span> e <span class="arithmatex">\(y\)</span>.</li>
+</ol>
+<p>Si el código ejecutado en la placa reproduce la simulación, la diferencia entre ambas ejecuciones es cero o muy pequeña. En las pruebas de este trabajo, la diferencia máxima en <span class="arithmatex">\(u\)</span>, <span class="arithmatex">\(v\)</span> e <span class="arithmatex">\(y\)</span> fue cero.</p>
+<p><img alt="Comparación de la salida y entre dos ejecuciones en el Simulation Data Inspector, con su diferencia" src="../img/figure6_comparacion.png" /></p>
+<p><em>Figura 6: Comparación de las ejecuciones PIL y Normal.</em></p>
+<p>Al completar esta guía, el lector cuenta con un controlador PID con anti-windup escrito en C y verificado en la STM32 Nucleo F767ZI mediante PIL.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

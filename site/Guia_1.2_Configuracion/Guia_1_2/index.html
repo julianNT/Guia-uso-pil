@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../../Guia_1_Instalacion/Guia_1/">
+      
+      
+        <link rel="next" href="../../Guia_2.1_PID_AntiWindup/Guia_2_1/">
       
       
         
@@ -19,7 +23,7 @@
     
     
       
-        <title>Guía 1.2: Configuración de las plataformas para PIL - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
+        <title>Guía 1.2 - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
       
     
     
@@ -96,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Guía 1.2: Configuración de las plataformas para PIL
+              Guía 1.2
             
           </span>
         </div>
@@ -243,10 +247,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../Guia_1.2/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 1.2
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -262,6 +293,170 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-previo-solver-del-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso previo: solver del modelo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-1-stm32-con-soporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración 1: STM32 con soporte
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuración 1: STM32 con soporte">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-seleccionar-la-placa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Seleccionar la placa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-configurar-la-comunicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Configurar la comunicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-seleccionar-el-system-target-file-y-la-toolchain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Seleccionar el System target file y la toolchain
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-2-raspberry-pi-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración 2: Raspberry Pi 5
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuración 2: Raspberry Pi 5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-seleccionar-la-placa_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Seleccionar la placa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-completar-los-parametros-de-conexion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Completar los parámetros de conexión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-seleccionar-el-system-target-file-y-la-toolchain_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Seleccionar el System target file y la toolchain
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validación
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -273,14 +468,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Guia_2_PID_STM32/Guia_2/" class="md-nav__link">
+      <a href="../../Guia_2.1_PID_AntiWindup/Guia_2_1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Guía 2
+    Guía 2.1
   
 
     
@@ -386,61 +581,11 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuracion-2-stm32-sin-soporte" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuración 2: STM32 sin soporte
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuración 2: STM32 sin soporte">
-      <ul class="md-nav__list">
-        
           <li class="md-nav__item">
-  <a href="#paso-1-seleccionar-la-serie" class="md-nav__link">
+  <a href="#paso-3-seleccionar-el-system-target-file-y-la-toolchain" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 1: Seleccionar la serie
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paso-2-crear-el-proyecto-de-stm32cubemx" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Paso 2: Crear el proyecto de STM32CubeMX
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paso-3-configurar-el-reloj-los-pines-y-el-usart" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Paso 3: Configurar el reloj, los pines y el USART
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#paso-4-configurar-la-comunicacion-en-el-modelo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Paso 4: Configurar la comunicación en el modelo
+        Paso 3: Seleccionar el System target file y la toolchain
       
     </span>
   </a>
@@ -453,15 +598,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuracion-3-raspberry-pi-5" class="md-nav__link">
+  <a href="#configuracion-2-raspberry-pi-5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuración 3: Raspberry Pi 5
+        Configuración 2: Raspberry Pi 5
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Configuración 3: Raspberry Pi 5">
+    <nav class="md-nav" aria-label="Configuración 2: Raspberry Pi 5">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -487,10 +632,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#paso-3-revisar-la-toolchain" class="md-nav__link">
+  <a href="#paso-3-seleccionar-el-system-target-file-y-la-toolchain_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 3: Revisar la toolchain
+        Paso 3: Seleccionar el System target file y la toolchain
       
     </span>
   </a>
@@ -532,13 +677,14 @@
 
 <h1 id="guia-12-configuracion-de-las-plataformas-para-pil">Guía 1.2: Configuración de las plataformas para PIL</h1>
 <h2 id="objetivo">Objetivo</h2>
-<p>Para esta etapa se configura el modelo de Simulink para ejecutar PIL en la <strong>NUCLEO-F767ZI</strong> y en la <strong>Raspberry Pi 5</strong>. La configuración se hace una sola vez por modelo e indica cómo se genera el código, para qué placa y como se comunica con el computador.</p>
+<p>Para esta etapa se configura el modelo de Simulink para ejecutar PIL en la <strong>STM32 Nucleo F767ZI</strong> y en la <strong>Raspberry Pi 5</strong>. La configuración se hace una sola vez por modelo e indica para qué placa y con qué herramientas se genera el código, y cómo se comunica con el computador.</p>
 <h2 id="contexto">Contexto</h2>
-<p>Con las herramientas de la Guía 1 instaladas, falta configurar a Simulink con qué placa trabajar y cómo conectarse a ella. Esa información se ingresa en el cuadro <em>Configuration Parameters</em> del modelo, que se abre con Ctrl+E.</p>
-<p>Lo que cambia entre las plataformas es el canal de comunicación: la NUCLEO usa un puerto serial y la Raspberry Pi usa la red (TCP/IP). Para la STM32 hay dos configuraciones. Si la placa tiene soporte, todo se configura en Simulink sin abrir STM32CubeMX. Si no lo tiene, además hay que crear y configurar un proyecto de STM32CubeMX que el modelo importa (<a href="https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/STM32-CubeMX-Configuration.html">Configure STM32 Boards using STM32CubeMX with Simulink</a>). Para la Raspberry Pi hay una sola configuración.</p>
+<p>Con las herramientas de la Guía 1 instaladas, falta indicarle a Simulink con qué placa trabajar y cómo conectarse a ella. Esa información se ingresa en el cuadro <strong>Configuration Parameters</strong> del modelo, que se abre con Ctrl+E.</p>
+<p>Lo que cambia entre las plataformas es el canal de comunicación: la STM32 usa un puerto serial y la Raspberry Pi usa la red (TCP/IP). Estas guías solo cubren placas con soporte, como la STM32 Nucleo F767ZI, que se configuran directamente en Simulink. Las placas STM32 sin soporte tienen otra opción de configuración, mediante un proyecto de STM32CubeMX, que no se aborda aquí (<a href="https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/STM32-CubeMX-Configuration.html">Configure STM32 Boards using STM32CubeMX with Simulink</a>).</p>
 <h2 id="paso-previo-solver-del-modelo">Paso previo: solver del modelo</h2>
-<p>Para generar y verificar código, el modelo debe usar un solver de paso fijo, porque el código generado solo admite ese tipo de solver. Además, el controlador solo tiene estados discretos, por lo que el solver <code>discrete (no continuous states)</code> es el adecuado.</p>
-<p>En <em>Configuration Parameters</em>, sección <em>Solver</em>, se configura:</p>
+<p>Para generar y verificar código, el modelo debe usar un solver de paso fijo, porque el código generado solo admite ese tipo de solver. El solver se deja en automático, para que Simulink lo elija según el modelo.</p>
+<p>En <strong>Configuration Parameters</strong>, sección <strong>Solver</strong>, se configura:</p>
+<p><em>Tabla 1: Configuración del solver.</em></p>
 <table>
 <thead>
 <tr>
@@ -553,65 +699,37 @@
 </tr>
 <tr>
 <td>Solver</td>
-<td><code>discrete (no continuous states)</code></td>
+<td><code>auto (Automatic solver selection)</code></td>
+</tr>
+<tr>
+<td>Fixed-step size</td>
+<td><code>auto</code></td>
 </tr>
 </tbody>
 </table>
-<p>El valor por defecto de <em>Fixed-step size</em> es <code>auto</code>, que elige un paso que cubra todos los tiempos de muestreo del modelo (<a href="https://www.mathworks.com/help/simulink/gui/fixedstepsizefundamentalsampletime.html">Fixed-step size</a>)</p>
-<p><img alt="alt text" src="../image-2.png" /></p>
+<p><strong>Fixed-step size</strong> se deja en <code>auto</code>, su valor por defecto, que elige un paso que cubra todos los tiempos de muestreo del modelo (<a href="https://www.mathworks.com/help/simulink/gui/fixedstepsizefundamentalsampletime.html">Fixed-step size</a>).</p>
+<p><img alt="Configuración del solver en Configuration Parameters" src="../img/image-2.png" /></p>
 <h2 id="configuracion-1-stm32-con-soporte">Configuración 1: STM32 con soporte</h2>
-<p>Es el caso de la NUCLEO-F767ZI: Simulink la reconoce por nombre, por lo que solo hay que elegir la placa e indicar cómo se comunica con el computador. Ambas cosas se hacen en <em>Configuration Parameters</em>, sección <em>Hardware Implementation</em>.</p>
+<p>Es el caso de la STM32 Nucleo F767ZI: Simulink la reconoce por nombre, por lo que solo hay que elegir la placa, indicar cómo se comunica con el computador y seleccionar las opciones de generación de código. Todo se hace en <strong>Configuration Parameters</strong>: las dos primeras en la sección <strong>Hardware Implementation</strong> y la última en <strong>Code Generation</strong>.</p>
 <h3 id="paso-1-seleccionar-la-placa">Paso 1: Seleccionar la placa</h3>
-<p>Lo primero es indicar para qué placa se generará el código. Despliega <strong>Hardware Implementation &gt; Hardware board</strong> y selecciona la entrada de la NUCLEO-F767ZI. Al elegirla, aparecen debajo los parámetros propios de la placa, entre ellos <em>Target hardware resources</em>, que se usa en el paso siguiente.</p>
-<p><img alt="alt text" src="../image-6.png" /></p>
+<p>Lo primero es indicar para qué placa se generará el código. Despliega <strong>Hardware Implementation &gt; Hardware board</strong> y selecciona <em>STM32 Nucleo F767ZI</em>. Al elegirla, aparecen debajo los parámetros propios de la placa, entre ellos <strong>Target hardware resources</strong>, que se usa en el paso siguiente.</p>
+<p><img alt="Selección de STM32 Nucleo F767ZI en Hardware board" src="../img/image-6.png" /></p>
 <h3 id="paso-2-configurar-la-comunicacion">Paso 2: Configurar la comunicación</h3>
-<p>En PIL, el modelo se comunica con la placa por un puerto serial: el computador ve la placa como un puerto COM y la placa usa un periférico llamado USART. El modelo necesita conocer ambos.</p>
-<p>Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en <em>Puertos (COM y LPT)</em>. Luego, en <em>Hardware Implementation &gt; Target hardware resources</em>, selecciona <em>External mode</em> y, en <em>Communication interface</em>, elige <em>Serial</em>. En <em>Connectivity</em>, selecciona el USART3 e indica el COM Port anotado. En la NUCLEO-F767ZI se usa el USART3 porque el ST-LINK expone un puerto COM virtual hacia el computador, conectado internamente a ese periférico en los pines PD8 y PD9 (<a href="https://www.st.com/resource/en/user_manual/dm00244518.pdf">UM1974, manual de las placas Nucleo-144</a>).</p>
-<p><img alt="alt text" src="../image-8.png" /></p>
-<h2 id="configuracion-2-stm32-sin-soporte">Configuración 2: STM32 sin soporte</h2>
-<p>Algunas placas no aparecen por nombre en la lista de Simulink, aunque su microcontrolador sí pertenezca a una serie soportada. Como Simulink no conoce la placa, el USART y sus pines deben configurarse a mano en un proyecto de STM32CubeMX, y el modelo importa ese proyecto. Aquí se parte con el solver del paso previo.</p>
-<h3 id="paso-1-seleccionar-la-serie">Paso 1: Seleccionar la serie</h3>
-<p>En vez de una placa, se elige una opción genérica de la serie del microcontrolador. En <strong>Hardware Implementation &gt; Hardware board</strong>, elige la opción custom de tu serie (en la serie F4xx, la documentación la llama <em>custom STM32F4xx Based hardware</em>).</p>
-<h3 id="paso-2-crear-el-proyecto-de-stm32cubemx">Paso 2: Crear el proyecto de STM32CubeMX</h3>
-<p>STM32CubeMX es la herramienta donde se configuran los periféricos del microcontrolador, y el modelo la recibe como un proyecto con extensión <code>.ioc</code>. En este paso se crea ese proyecto y se abre.</p>
-<p>En <em>Build options</em>, usa <em>Browse</em> si ya tienes un proyecto <code>.ioc</code>, o <em>Create</em> para crear uno nuevo: escribe el nombre con extensión <code>.ioc</code>, elige la carpeta, selecciona el microcontrolador de tu placa y confirma con <em>Apply</em> y <em>OK</em>. Luego presiona <em>Launch</em> para abrirlo en STM32CubeMX.</p>
-<h3 id="paso-3-configurar-el-reloj-los-pines-y-el-usart">Paso 3: Configurar el reloj, los pines y el USART</h3>
-<p>Un proyecto creado solo desde el microcontrolador parte sin pines asignados. Antes de configurar el USART hay que resolver el reloj y los pines.</p>
-<p>En <em>Clock Configuration</em>, ajusta el reloj del sistema. En <em>Pinout &amp; Configuration</em>, asigna los pines TX y RX del USART elegido, haciendo clic sobre ellos en el diagrama del encapsulado; los pines conectados al ST-LINK están indicados en el esquemático de la placa. Después configura el USART con los valores de la Tabla 1 y guarda el proyecto (<a href="https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/External-mode-PIL.html">Serial Configuration for Monitor &amp; Tune and PIL</a>).</p>
-<p><em>Tabla 1: Configuración del USART en STM32CubeMX.</em></p>
-<table>
-<thead>
-<tr>
-<th>Parámetro</th>
-<th>Valor</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Mode</td>
-<td>Asynchronous.</td>
-</tr>
-<tr>
-<td>Baud Rate</td>
-<td>El que usará el modelo; anótalo.</td>
-</tr>
-<tr>
-<td>DMA Settings</td>
-<td>Solicitud DMA para la recepción del USART.</td>
-</tr>
-</tbody>
-</table>
-<p><em>[Agregar imagen: vista Pinout &amp; Configuration con los pines TX y RX asignados.]</em></p>
-<h3 id="paso-4-configurar-la-comunicacion-en-el-modelo">Paso 4: Configurar la comunicación en el modelo</h3>
-<p>Con el proyecto listo, falta indicarle al modelo el puerto del computador y el USART elegido. Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en <em>Puertos (COM y LPT)</em>.</p>
-<p>En <em>Hardware Implementation &gt; Target hardware resources</em>, selecciona <em>External mode</em> y, en <em>Communication interface</em>, elige <em>Serial</em>. En <em>Connectivity</em>, selecciona el USART configurado en el paso anterior e indica el COM Port. El baud rate debe coincidir con el del proyecto de STM32CubeMX.</p>
-<h2 id="configuracion-3-raspberry-pi-5">Configuración 3: Raspberry Pi 5</h2>
-<p>La Raspberry Pi 5 es un computador con Linux, por lo que no se configuran periféricos ni pines. Simulink se conecta a ella por red, usando la dirección y las credenciales de su Linux, y esos datos se ingresan en la configuración del modelo (<a href="https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html">Model Configuration Simulink Support Package for Raspberry Pi Hardware</a>). La placa debe estar encendida y en la misma red que el computador. Aquí también se parte con el solver del paso previo.</p>
+<p>En PIL, el modelo se comunica con la placa por un puerto serial: el computador ve la placa como un puerto COM, y el modelo necesita saber cuál es.</p>
+<p>Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en <em>Puertos (COM y LPT)</em>. Luego, en <strong>Hardware Implementation &gt; Target hardware resources</strong>, entra a la pestaña <strong>PIL</strong>. En <strong>PIL communication interface</strong>, elige <strong>Serial</strong> y, en <strong>Serial port</strong>, escribe el COM anotado.</p>
+<p><img alt="Pestaña PIL con la interfaz Serial y el puerto COM3" src="../img/image-8.png" /></p>
+<p>Indica también el mismo COM en la pestaña <strong>External mode</strong>.</p>
+<h3 id="paso-3-seleccionar-el-system-target-file-y-la-toolchain">Paso 3: Seleccionar el System target file y la toolchain</h3>
+<p>Para poder usar PIL, en <strong>Code Generation &gt; System target file</strong> selecciona <code>ert.tlc</code>, que corresponde a Embedded Coder.</p>
+<p>La toolchain es el compilador que Simulink usa para construir el código generado. En <strong>Code Generation &gt; Toolchain</strong>, selecciona <strong>GNU Tools for ARM Embedded Processors</strong>, la que instaló el asistente en la Guía 1.</p>
+<p><img alt="STM32 Nucleo F767ZI con ert.tlc como System target file" src="../img/image-1.png" /></p>
+<h2 id="configuracion-2-raspberry-pi-5">Configuración 2: Raspberry Pi 5</h2>
+<p>La Raspberry Pi 5 es un computador con Linux, por lo que no se configuran periféricos ni pines. Simulink se conecta a ella por red, usando la dirección y las credenciales de su Linux, y esos datos se ingresan en la configuración del modelo (<a href="https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html">Model Configuration Simulink Support Package for Raspberry Pi Hardware</a>). La placa debe estar encendida y, por conveniencia, en la misma red que el computador. Aquí también se parte con el solver del paso previo.</p>
 <h3 id="paso-1-seleccionar-la-placa_1">Paso 1: Seleccionar la placa</h3>
-<p>Igual que en la STM32, se indica para qué placa se genera el código. En <strong>Hardware Implementation &gt; Hardware board</strong>, selecciona <em>Raspberry Pi</em>. Esto carga los parámetros por defecto de la placa, que se completan en el paso siguiente.</p>
-<p><img alt="alt text" src="../image-9.png" /></p>
+<p>Igual que en la STM32, se indica para qué placa se genera el código. En <strong>Hardware Implementation &gt; Hardware board</strong>, selecciona <em>Raspberry Pi (64bit)</em>. Esto carga los parámetros por defecto de la placa, que se completan en el paso siguiente.</p>
+<p><img alt="Selección de Raspberry Pi (64bit) en Hardware board" src="../img/image-9.png" /></p>
 <h3 id="paso-2-completar-los-parametros-de-conexion">Paso 2: Completar los parámetros de conexión</h3>
-<p>Con la placa seleccionada aparecen sus parámetros. Cuatro de ellos son los que Simulink usa para encontrar la Raspberry y acceder a su Linux; complétalos con los valores de la Tabla 2.</p>
+<p>Con la placa seleccionada aparecen sus parámetros. Para que Simulink se comunique con la Raspberry hay que modificar tres de ellos, en <strong>Target hardware resources &gt; Board Parameters</strong>, con el botón <strong>Edit</strong>. Con estos datos queda configurada indirectamente la comunicación por TCP/IP.</p>
 <p><em>Tabla 2: Parámetros de conexión con la Raspberry Pi.</em></p>
 <table>
 <thead>
@@ -635,13 +753,12 @@
 </tr>
 </tbody>
 </table>
-<p>Para confirmar lo registrado, ejecuta <code>raspberrypi</code> en la Command Window: devuelve el nombre de host, el usuario, la contraseña y el directorio de compilación de la última conexión exitosa (<a href="https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi.html">raspberrypi</a>).</p>
-<p><img alt="alt text" src="../image-10.png" /></p>
-<h3 id="paso-3-revisar-la-toolchain">Paso 3: Revisar la toolchain</h3>
-<p>La toolchain es el compilador que Simulink usa para construir el código generado. Para la Raspberry debe estar seleccionada <strong>GNU GCC Embedded Linux</strong>, que es la que usa el ejemplo oficial de PIL con Raspberry Pi citado en el paso previo. La opción está en <em>Code Generation &gt; Toolchain</em>.</p>
-<p><img alt="alt text" src="../image-11.png" /></p>
+<p><img alt="Parámetros de conexión de la Raspberry Pi en Board Parameters" src="../img/image-10.png" /></p>
+<h3 id="paso-3-seleccionar-el-system-target-file-y-la-toolchain_1">Paso 3: Seleccionar el System target file y la toolchain</h3>
+<p>Igual que en la STM32, en <strong>Code Generation &gt; System target file</strong> selecciona <code>ert.tlc</code>. En <strong>Code Generation &gt; Toolchain</strong>, selecciona <strong>GNU GCC Embedded Linux</strong>.</p>
+<p><img alt="System target file y toolchain GNU GCC Embedded Linux en Code Generation" src="../img/image-11.png" /></p>
 <h2 id="validacion">Validación</h2>
-<p>Si el modelo tiene el solver de paso fijo, la placa seleccionada y los parámetros de comunicación completos, la configuración está lista. Guarda el modelo.</p>
+<p>Si el modelo tiene el solver de paso fijo, la placa seleccionada, los parámetros de comunicación completos, <code>ert.tlc</code> como System target file y la toolchain de la placa seleccionada, la configuración está lista. Guarda el modelo.</p>
 
 
 
