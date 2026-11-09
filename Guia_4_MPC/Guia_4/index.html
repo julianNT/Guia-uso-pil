@@ -9,6 +9,8 @@
       
       
       
+        <link rel="prev" href="../../Guia_3_PID_AntiWindup/Guia_3/">
+      
       
       
         
@@ -19,7 +21,7 @@
     
     
       
-        <title>Guía 4: Controlador predictivo (MPC) con PIL en STM32 Nucleo F767ZI - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
+        <title>Guía 4 - Guías PIL en MATLAB/Simulink</title>
       
     
     
@@ -76,7 +78,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabecera">
-    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-header__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+    <a href="../.." title="Guías PIL en MATLAB/Simulink" class="md-header__button md-logo" aria-label="Guías PIL en MATLAB/Simulink" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -90,13 +92,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+            Guías PIL en MATLAB/Simulink
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Guía 4: Controlador predictivo (MPC) con PIL en STM32 Nucleo F767ZI
+              Guía 4
             
           </span>
         </div>
@@ -174,13 +176,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-nav__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+    <a href="../.." title="Guías PIL en MATLAB/Simulink" class="md-nav__button md-logo" aria-label="Guías PIL en MATLAB/Simulink" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+    Guías PIL en MATLAB/Simulink
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -289,6 +291,251 @@
   
 
       </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 4
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caso-de-estudio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso de estudio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Caso de estudio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-obtener-los-archivos-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Obtener los archivos del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-generar-el-problema-qp-opcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Generar el problema QP (opcional)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-revisar-la-funcion-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Revisar la función del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-crear-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Crear el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-configurar-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 5: Configurar el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-configurar-la-comunicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 6: Configurar la comunicación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-7-crear-el-modelo-de-prueba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 7: Crear el modelo de prueba
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-8-ejecutar-la-simulacion-pil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 8: Ejecutar la simulación PIL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-9-verificar-la-equivalencia-numerica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 9: Verificar la equivalencia numérica
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-10-medir-el-tiempo-de-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 10: Medir el tiempo de ejecución
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
