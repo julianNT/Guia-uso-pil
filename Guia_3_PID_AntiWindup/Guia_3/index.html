@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../../Guia_1.2_Configuracion/Guia_1_2/">
+        <link rel="prev" href="../../Guia_2_Configuracion/Guia_2/">
       
       
       
@@ -21,7 +21,7 @@
     
     
       
-        <title>Guía 2.1 - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
+        <title>Guía 3 - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#guia-21-controlador-pid-con-anti-windup-con-pil-en-stm32-nucleo-f767zi" class="md-skip">
+        <a href="#guia-3-controlador-pid-con-anti-windup-con-pil-en-stm32-nucleo-f767zi" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -98,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Guía 2.1
+              Guía 3
             
           </span>
         </div>
@@ -248,14 +248,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Guia_1.2_Configuracion/Guia_1_2/" class="md-nav__link">
+      <a href="../../Guia_2_Configuracion/Guia_2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Guía 1.2
+    Guía 2
   
 
     
@@ -291,7 +291,7 @@
   <span class="md-ellipsis">
     
   
-    Guía 2.1
+    Guía 3
   
 
     
@@ -309,7 +309,7 @@
   <span class="md-ellipsis">
     
   
-    Guía 2.1
+    Guía 3
   
 
     
@@ -683,7 +683,7 @@
 
 
 
-<h1 id="guia-21-controlador-pid-con-anti-windup-con-pil-en-stm32-nucleo-f767zi">Guía 2.1: Controlador PID con anti-windup con PIL en STM32 Nucleo F767ZI</h1>
+<h1 id="guia-3-controlador-pid-con-anti-windup-con-pil-en-stm32-nucleo-f767zi">Guía 3: Controlador PID con anti-windup con PIL en STM32 Nucleo F767ZI</h1>
 <h2 id="objetivo">Objetivo</h2>
 <p>En esta guía el lector implementa un controlador PID discreto con anti-windup, escrito en C, y lo ejecuta en la STM32 Nucleo F767ZI mediante PIL. Luego verifica que el código ejecutado en la placa reproduce la simulación en el computador.</p>
 <h2 id="contexto">Contexto</h2>
@@ -846,7 +846,7 @@ x_f[k+1] = x_f[k] + \frac{T_s}{T_f}\left(e[k] - x_f[k]\right) \tag{7}
 <p><img alt="Ventana del bloque C Function con la llamada a pid_aw_step" src="../img/figura3_cfuntion.png" /></p>
 <p><em>Figura 3: Configuración del bloque C Function.</em></p>
 <h2 id="paso-3-configurar-el-modelo-del-controlador">Paso 3: Configurar el modelo del controlador</h2>
-<p>Configure el solver, la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_1.2_Configuracion/Guia_1_2/">Guía 1.2</a>. Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.</p>
+<p>Configure el solver, la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.</p>
 <p><em>Tabla 2: Configuración adicional del modelo pid_aw_ctrl.</em></p>
 <table>
 <thead>
@@ -887,9 +887,9 @@ x_f[k+1] = x_f[k] + \frac{T_s}{T_f}\left(e[k] - x_f[k]\right) \tag{7}
 <p>El código propio se indica dos veces porque Simulation Target lo usa al simular en el computador y Custom Code lo usa al generar el código para la placa.</p>
 <h2 id="paso-4-configurar-la-comunicacion">Paso 4: Configurar la comunicación</h2>
 <p>En cada paso, el computador envía a la placa la referencia <span class="arithmatex">\(r[k]\)</span>, la medición <span class="arithmatex">\(y[k]\)</span> y el vector de parámetros, y recibe de vuelta las señales <span class="arithmatex">\(u[k]\)</span> y <span class="arithmatex">\(v[k]\)</span> (Figura 1). Este intercambio ocurre por el puerto serial.</p>
-<p>Configure el puerto como se explica en la Guía 1.2: en <strong>Hardware Implementation &gt; Target hardware resources &gt; PIL</strong>, elija <strong>Serial</strong> en <strong>PIL communication interface</strong> y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.</p>
+<p>Configure el puerto como se explica en la Guía 2: en <strong>Hardware Implementation &gt; Target hardware resources &gt; PIL</strong>, elija <strong>Serial</strong> en <strong>PIL communication interface</strong> y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.</p>
 <h2 id="paso-5-crear-el-modelo-de-prueba">Paso 5: Crear el modelo de prueba</h2>
-<p>Cree el modelo <code>pid_aw_lazo.slx</code> en la misma carpeta, con los parámetros del Paso 1, cada uno en un bloque Constant, y utilice la configuración de la Guía 1.2. No necesita las opciones de la Tabla 2. La Figura 4 muestra el lazo cerrado que contiene.</p>
+<p>Cree el modelo <code>pid_aw_lazo.slx</code> en la misma carpeta, con los parámetros del Paso 1, cada uno en un bloque Constant, y utilice la configuración de la Guía 2. No necesita las opciones de la Tabla 2. La Figura 4 muestra el lazo cerrado que contiene.</p>
 <p>Un generador de pulsos entrega la referencia, que sube a 1 y vuelve a 0 de forma periódica. Un grupo de constantes guarda los valores de la Tabla 1 y los reúne en el vector <code>p</code>. El bloque Model llama al controlador <code>pid_aw_ctrl</code>, que recibe la referencia, la medición y ese vector. La señal saturada <span class="arithmatex">\(u\)</span> entra a la planta de la Ecuación 1, y su salida <span class="arithmatex">\(y\)</span> vuelve al controlador como medición. Dos Scope muestran la respuesta del lazo y las señales de control, y las señales <span class="arithmatex">\(u\)</span>, <span class="arithmatex">\(v\)</span> e <span class="arithmatex">\(y\)</span> quedan registradas para revisarlas en el Simulation Data Inspector.</p>
 <p><img alt="Modelo pid_aw_lazo con el bloque Model en modo PIL, las constantes de p y la planta" src="../img/figure4_modelo_lazo.png" /></p>
 <p><em>Figura 4: Modelo de prueba pid_aw_lazo.</em></p>

@@ -1,0 +1,942 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Guía 4: Controlador predictivo (MPC) con PIL en STM32 Nucleo F767ZI - Guías de simulación Processor-in-the-Loop en MATLAB/Simulink</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guia-4-controlador-predictivo-mpc-con-pil-en-stm32-nucleo-f767zi" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-header__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Guía 4: Controlador predictivo (MPC) con PIL en STM32 Nucleo F767ZI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" class="md-nav__button md-logo" aria-label="Guías de simulación Processor-in-the-Loop en MATLAB/Simulink" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Guías de simulación Processor-in-the-Loop en MATLAB/Simulink
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_1_Instalacion/Guia_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_2_Configuracion/Guia_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guia_3_PID_AntiWindup/Guia_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caso-de-estudio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso de estudio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Caso de estudio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-obtener-los-archivos-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Obtener los archivos del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-generar-el-problema-qp-opcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Generar el problema QP (opcional)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-revisar-la-funcion-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Revisar la función del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-crear-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Crear el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-configurar-el-modelo-del-controlador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 5: Configurar el modelo del controlador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-configurar-la-comunicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 6: Configurar la comunicación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-7-crear-el-modelo-de-prueba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 7: Crear el modelo de prueba
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-8-ejecutar-la-simulacion-pil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 8: Ejecutar la simulación PIL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-9-verificar-la-equivalencia-numerica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 9: Verificar la equivalencia numérica
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-10-medir-el-tiempo-de-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 10: Medir el tiempo de ejecución
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="guia-4-controlador-predictivo-mpc-con-pil-en-stm32-nucleo-f767zi">Guía 4: Controlador predictivo (MPC) con PIL en STM32 Nucleo F767ZI</h1>
+<h2 id="objetivo">Objetivo</h2>
+<p>En esta guía el lector ejecuta un controlador predictivo basado en modelo (MPC) en la STM32 Nucleo F767ZI mediante PIL. El MPC no existe como un bloque de Simulink que se configura con unos pocos parámetros: en cada periodo de muestreo resuelve un problema de optimización, y para eso necesita un solver numérico escrito en C. La guía muestra cómo integrar ese código en un modelo de Simulink, cómo ejecutarlo en la placa y cómo verificar que entrega los mismos resultados que la simulación en el computador. Al final se mide cuánto tarda la placa en calcular cada acción de control, que es el dato que permite decidir si el controlador puede funcionar en tiempo real.</p>
+<h2 id="contexto">Contexto</h2>
+<p>Un MPC calcula la acción de control resolviendo, en cada instante de muestreo, un problema de optimización. Con el estado medido de la planta, el controlador predice la evolución del sistema durante un horizonte de <span class="arithmatex">\(N\)</span> pasos y busca la secuencia de entradas que minimiza un costo, respetando los límites de las entradas y de los estados. De esa secuencia solo aplica la primera entrada. En el siguiente instante mide de nuevo el estado y repite el cálculo. Este procedimiento se llama horizonte deslizante (<a href="https://osqp.org/docs/examples/mpc.html">OSQP, Model predictive control</a>).</p>
+<p>Cuando el modelo de la planta es lineal, el costo es cuadrático y las restricciones son lineales, el problema que se resuelve en cada paso es un programa cuadrático (QP). Para resolverlo se usa OSQP, un solver de código abierto para QP convexos basado en el método ADMM. OSQP resuelve problemas de la forma de la Ecuación 1.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\min_{z} \quad &amp; \tfrac{1}{2} z^\top P z + q^\top z \\
+\text{sujeto a} \quad &amp; l \le A z \le u
+\end{aligned} \tag{1}
+\]</div>
+<p>OSQP puede generar código C a la medida de un problema, sin asignación dinámica de memoria y sin dependencias de otras librerías, lo que permite compilarlo para un microcontrolador. El código de esta guía usa OSQP 0.6.2 y proviene del repositorio TiempoMPC.</p>
+<p>El controlador completo, es decir, la preparación del problema y la llamada a OSQP, está escrito en C y se integra con un bloque C Function, igual que en la Guía 3. Así, el mismo código C se ejecuta en el computador durante la simulación normal y en la placa durante la simulación PIL.</p>
+<p>La simulación PIL usa el bloque Model. En modo PIL, el bloque Model genera código del modelo referenciado, lo compila para la placa y lo ejecuta en ella. La Figura 1 muestra la partición del lazo. El MPC, dentro del modelo <code>mpc_ctrl.slx</code>, corre en la STM32 Nucleo F767ZI. La planta, las referencias y la perturbación, dentro del modelo <code>lazo.slx</code>, corren en el computador. En cada paso, el computador envía a la placa el estado medido y las entradas del controlador, y la placa devuelve la tensión que se aplica al motor y el número de iteraciones del solver.</p>
+<p><img alt="Partición del lazo de control del MPC entre la placa y el computador" src="../img/particion_mpc.svg" /></p>
+<p><em>Figura 1: Partición del lazo de control en la simulación PIL del MPC.</em></p>
+<h2 id="caso-de-estudio">Caso de estudio</h2>
+<h3 id="planta">Planta</h3>
+<p>La planta es un motor DC con control de velocidad. La Ecuación 2 describe la parte eléctrica y la parte mecánica del motor.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+L \frac{di}{dt} &amp;= -R\, i - K \omega + V \\
+J \frac{d\omega}{dt} &amp;= K\, i - b\, \omega - T_L
+\end{aligned} \tag{2}
+\]</div>
+<p>Los estados son la corriente de armadura <span class="arithmatex">\(i\)</span> y la velocidad angular <span class="arithmatex">\(\omega\)</span>, por lo que <span class="arithmatex">\(x = [\,i;\ \omega\,]\)</span>. La entrada manipulada es la tensión <span class="arithmatex">\(V\)</span> y la perturbación es el torque de carga <span class="arithmatex">\(T_L\)</span>. Los parámetros son <span class="arithmatex">\(J = 0.01\ \text{kg}\cdot\text{m}^2\)</span>, <span class="arithmatex">\(b = 0.1\ \text{N}\cdot\text{m}\cdot\text{s}\)</span>, <span class="arithmatex">\(K = 0.01\ \text{N}\cdot\text{m/A}\)</span>, <span class="arithmatex">\(R = 1\ \Omega\)</span> y <span class="arithmatex">\(L = 0.5\ \text{H}\)</span>.</p>
+<p>El MPC trabaja en tiempo discreto con un periodo de muestreo <span class="arithmatex">\(T_s = 10\ \text{ms}\)</span>. El modelo de la Ecuación 2 se discretiza con retenedor de orden cero (ZOH), lo que entrega la Ecuación 3.</p>
+<div class="arithmatex">\[
+x[k+1] = A_d\, x[k] + B_d\, V[k] + B_{p,d}\, T_L[k] \tag{3}
+\]</div>
+<div class="arithmatex">\[
+A_d = \begin{bmatrix} 0.9802 &amp; -1.884\cdot 10^{-4} \\ 0.0094 &amp; 0.9048 \end{bmatrix}, \quad
+B_d = \begin{bmatrix} 0.0198 \\ 9.610\cdot 10^{-5} \end{bmatrix}, \quad
+B_{p,d} = \begin{bmatrix} 9.610\cdot 10^{-5} \\ -0.9516 \end{bmatrix}
+\]</div>
+<h3 id="controlador">Controlador</h3>
+<p>El objetivo del controlador es que <span class="arithmatex">\(\omega\)</span> siga una referencia <span class="arithmatex">\(\omega^*\)</span>. Para eso, el MPC primero calcula el punto de equilibrio en que el motor gira a la velocidad pedida. Igualando a cero las derivadas de la Ecuación 2 con <span class="arithmatex">\(\omega = \omega^*\)</span> se obtiene la Ecuación 4.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\omega_\infty &amp;= \omega^* \\
+i_\infty &amp;= \frac{b\, \omega^* + T_L}{K} \\
+V_\infty &amp;= R\, i_\infty + K \omega^*
+\end{aligned} \tag{4}
+\]</div>
+<p>El problema de optimización se escribe en variables de desviación respecto de ese equilibrio, <span class="arithmatex">\(\tilde{x} = x - x_\infty\)</span> y <span class="arithmatex">\(\tilde{V} = V - V_\infty\)</span>. Así, llevar <span class="arithmatex">\(\omega\)</span> a la referencia equivale a llevar <span class="arithmatex">\(\tilde{x}\)</span> a cero. En cada paso, el MPC resuelve el problema de la Ecuación 5.</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\min_{\tilde{x},\, \tilde{V}} \quad &amp; \sum_{k=0}^{N-1} \left( \tilde{x}_k^\top Q\, \tilde{x}_k + R_V\, \tilde{V}_k^2 \right) + \tilde{x}_N^\top P_N\, \tilde{x}_N \\
+\text{sujeto a} \quad &amp; \tilde{x}_{k+1} = A_d\, \tilde{x}_k + B_d\, \tilde{V}_k \\
+&amp; \tilde{x}_0 = x[k] - x_\infty \\
+&amp; -I_{max} \le \tilde{i}_k + i_\infty \le I_{max}, \qquad k = 1, \dots, N \\
+&amp; -V_{max} \le \tilde{V}_k + V_\infty \le V_{max}, \qquad k = 0, \dots, N-1
+\end{aligned} \tag{5}
+\]</div>
+<p>La Tabla 1 resume los parámetros del controlador. El peso <span class="arithmatex">\(Q\)</span> penaliza mucho más el error de velocidad que el de corriente, porque el objetivo es seguir la referencia de velocidad. El costo terminal <span class="arithmatex">\(P_N\)</span> se obtiene de la ecuación algebraica de Riccati discreta, que es una elección habitual para el último paso del horizonte.</p>
+<p><em>Tabla 1: Parámetros del MPC.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(T_s\)</span></td>
+<td>10 ms</td>
+<td>Periodo de muestreo</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(N\)</span></td>
+<td>10</td>
+<td>Horizonte de predicción (0.1 s)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(Q\)</span></td>
+<td>diag(0.01, 1000)</td>
+<td>Peso sobre el error de <span class="arithmatex">\(i\)</span> y de <span class="arithmatex">\(\omega\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R_V\)</span></td>
+<td>0.01</td>
+<td>Peso sobre la tensión</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(P_N\)</span></td>
+<td>solución de la ecuación de Riccati</td>
+<td>Costo terminal</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(V_{max}\)</span></td>
+<td>24 V</td>
+<td>Límite de tensión</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(I_{max}\)</span></td>
+<td>10 A</td>
+<td>Límite de corriente (entrada del bloque)</td>
+</tr>
+</tbody>
+</table>
+<p>Para que OSQP pueda resolver la Ecuación 5, todas las incógnitas se agrupan en un solo vector <span class="arithmatex">\(z = [\tilde{x}_0, \dots, \tilde{x}_{10}, \tilde{V}_0, \dots, \tilde{V}_9]\)</span>, de 32 elementos. La dinámica y los límites quedan como las 42 filas de la restricción <span class="arithmatex">\(l \le Az \le u\)</span> de la Ecuación 1: 22 filas de igualdad para la condición inicial y la dinámica, 10 filas para la corriente y 10 para la tensión. Las matrices <span class="arithmatex">\(P\)</span> y <span class="arithmatex">\(A\)</span> dependen solo del modelo y de los pesos, por lo que no cambian durante la operación. Lo único que cambia en cada paso son los vectores <span class="arithmatex">\(l\)</span> y <span class="arithmatex">\(u\)</span>, porque dependen del estado medido, de la referencia, de <span class="arithmatex">\(I_{max}\)</span> y de <span class="arithmatex">\(T_L\)</span>. Esta propiedad es la que permite que el problema se prepare una sola vez en el computador y que la placa solo actualice dos vectores en cada paso.</p>
+<h2 id="paso-1-obtener-los-archivos-del-controlador">Paso 1: Obtener los archivos del controlador</h2>
+<p>Descargue la carpeta <code>mpc_osqp</code> del <a href="https://github.com/julianNT/Ejemplos-uso-de-PIL">repositorio de las guías</a>. La Tabla 2 describe su contenido.</p>
+<p><em>Tabla 2: Archivos del controlador MPC.</em></p>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Qué es</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>osqp/</code></td>
+<td>Librería OSQP 0.6.2 en C, copiada del repositorio <a href="https://github.com/manuelsimonv/TiempoMPC">TiempoMPC</a>.</td>
+</tr>
+<tr>
+<td><code>osqp/src/workspace.c</code> y <code>osqp/include/workspace.h</code></td>
+<td>El problema QP del motor ya armado: matrices <span class="arithmatex">\(P\)</span> y <span class="arithmatex">\(A\)</span>, su factorización y los ajustes del solver. Se generan con el script de Python.</td>
+</tr>
+<tr>
+<td><code>mpc_motor.c</code> y <code>mpc_motor.h</code></td>
+<td>La función <code>mpc_motor_step</code>, que en cada paso prepara el problema, llama a OSQP y entrega la tensión.</td>
+</tr>
+<tr>
+<td><code>generar_mpc_motor.py</code></td>
+<td>Script que arma el QP a partir del modelo y de los parámetros, y genera <code>workspace.c</code> y <code>workspace.h</code>.</td>
+</tr>
+<tr>
+<td><code>mpc_ctrl.slx</code></td>
+<td>Modelo terminado del controlador. Contiene un bloque C Function. Es lo que se ejecuta en la placa.</td>
+</tr>
+<tr>
+<td><code>lazo.slx</code></td>
+<td>Modelo terminado de prueba, con la planta, las referencias y el bloque Model.</td>
+</tr>
+<tr>
+<td><code>errores_mil_pil.m</code></td>
+<td>Script que compara la simulación normal con la simulación PIL.</td>
+</tr>
+</tbody>
+</table>
+<p>Los Pasos 4 a 7 explican cómo se crean los modelos desde cero. Si usa los modelos incluidos, solo debe ajustar las rutas de la Tabla 4 y el puerto COM.</p>
+<p>La Figura 2 muestra cómo se relacionan estos archivos. A la izquierda está el trabajo que se hace una sola vez en el computador: el script de Python arma el problema y el generador de código de OSQP lo escribe en <code>workspace.c</code>. A la derecha está lo que ocurre en la placa en cada periodo de muestreo: el bloque C Function llama a <code>mpc_motor_step</code>, y esta función llama a la librería OSQP, que lee el problema guardado en <code>workspace.c</code>.</p>
+<p><img alt="Relación entre los archivos del controlador" src="../img/archivos_mpc.png" /></p>
+<p><em>Figura 2: Trabajo fuera de línea y en línea del controlador MPC.</em></p>
+<h2 id="paso-2-generar-el-problema-qp-opcional">Paso 2: Generar el problema QP (opcional)</h2>
+<p>Este paso solo es necesario si cambia la planta, el periodo de muestreo, el horizonte, los pesos, el límite de tensión o los ajustes del solver. Con los parámetros de la Tabla 1, la carpeta ya incluye el <code>workspace.c</code> correcto y puede pasar al Paso 3.</p>
+<p>El script <code>generar_mpc_motor.py</code> discretiza el modelo, arma las matrices del QP como en el Caso de estudio y llama al generador de código de OSQP con la opción de parámetros vectoriales. Con esa opción, el código generado permite actualizar <span class="arithmatex">\(q\)</span>, <span class="arithmatex">\(l\)</span> y <span class="arithmatex">\(u\)</span> durante la operación, que es justo lo que necesita el MPC (<a href="https://osqp.org/docs/codegen/python.html">OSQP, Python code generation</a>). El script copia a la carpeta <code>osqp/</code> solo <code>workspace.c</code> y <code>workspace.h</code>, y deja el resto de la librería intacto.</p>
+<p>Para ejecutarlo, instale la interfaz de Python de OSQP en una versión compatible con la librería 0.6.2 y corra el script en la carpeta del ejemplo:</p>
+<div class="highlight"><pre><span></span><code>pip install "osqp==0.6.7.post3" numpy scipy
+python generar_mpc_motor.py
+</code></pre></div>
+<p>Al terminar, el script imprime los valores que deben coincidir en <code>mpc_motor.c</code>, como el tamaño del problema y los índices de las filas de los límites. Si cambió el horizonte, el límite de tensión o la planta, actualice esas constantes a mano en <code>mpc_motor.c</code>. Si cambió <span class="arithmatex">\(T_s\)</span>, cámbielo también en los modelos de Simulink.</p>
+<p>Los ajustes del solver quedan fijos dentro de <code>workspace.c</code>. En este ejemplo se usa un máximo de 100 iteraciones, tolerancias absoluta y relativa de <span class="arithmatex">\(10^{-3}\)</span>, arranque en caliente (warm start) y sin pulido de la solución. El script también desactiva la adaptación del parámetro <span class="arithmatex">\(\rho\)</span>.</p>
+<h2 id="paso-3-revisar-la-funcion-del-controlador">Paso 3: Revisar la función del controlador</h2>
+<p>La función <code>mpc_motor_step</code>, en <code>mpc_motor.c</code>, recibe el estado medido, la referencia, el límite de corriente y el torque de carga, y devuelve la tensión a aplicar y el número de iteraciones que usó OSQP. Hace cuatro cosas en orden:</p>
+<ol>
+<li>Calcula el punto de equilibrio con la Ecuación 4.</li>
+<li>Arma los vectores <span class="arithmatex">\(l\)</span> y <span class="arithmatex">\(u\)</span>. Las dos primeras filas fijan la condición inicial <span class="arithmatex">\(\tilde{x}_0 = x[k] - x_\infty\)</span>, las filas siguientes de la dinámica quedan en cero, y las últimas veinte filas contienen los límites de corriente y de tensión expresados en desviación.</li>
+<li>Entrega <span class="arithmatex">\(l\)</span> y <span class="arithmatex">\(u\)</span> a OSQP con <code>osqp_update_bounds</code> y resuelve con <code>osqp_solve</code>. Las matrices <span class="arithmatex">\(P\)</span> y <span class="arithmatex">\(A\)</span> ya están en la variable global <code>workspace</code>, definida en <code>workspace.c</code>.</li>
+<li>Toma la primera tensión del horizonte, que está en la posición 22 del vector solución, y le suma <span class="arithmatex">\(V_\infty\)</span> para volver a la variable absoluta.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">mpc_motor_step</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">Imax</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TL</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">V</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">c_float</span><span class="w"> </span><span class="n">l</span><span class="p">[</span><span class="n">M_RES</span><span class="p">],</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="n">M_RES</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* (1) Estado estacionario: con w = r,  K i = b w + TL  y  V = R i + K w */</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">w_inf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">i_inf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">B_M</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">TL</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">K_M</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">V_inf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">R_M</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i_inf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">K_M</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* (2) Limites en variables de desviacion (x~ = x - x_inf, u~ = V - V_inf) */</span>
+<span class="w">    </span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i_inf</span><span class="p">);</span><span class="w">                 </span><span class="cm">/* x~0 = x medido - x_inf */</span>
+<span class="w">    </span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">w_inf</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="n">l</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span><span class="w">                         </span><span class="cm">/* dinamica: igualdades   */</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">l</span><span class="p">[</span><span class="mi">22</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">Imax</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i_inf</span><span class="p">;</span><span class="w">                 </span><span class="cm">/* |i| &lt;= Imax            */</span>
+<span class="w">        </span><span class="n">u</span><span class="p">[</span><span class="mi">22</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">Imax</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i_inf</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">l</span><span class="p">[</span><span class="mi">32</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">V_MAX</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">V_inf</span><span class="p">;</span><span class="w">                </span><span class="cm">/* |V| &lt;= Vmax            */</span>
+<span class="w">        </span><span class="n">u</span><span class="p">[</span><span class="mi">32</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">V_MAX</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">V_inf</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/* (3) Resolver el QP */</span>
+<span class="w">    </span><span class="n">osqp_update_bounds</span><span class="p">(</span><span class="o">&amp;</span><span class="n">workspace</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">);</span>
+<span class="w">    </span><span class="n">osqp_solve</span><span class="p">(</span><span class="o">&amp;</span><span class="n">workspace</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* (4) Primera tension del horizonte, de vuelta a variable absoluta */</span>
+<span class="w">    </span><span class="o">*</span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">workspace</span><span class="p">.</span><span class="n">solution</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V_inf</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">workspace</span><span class="p">.</span><span class="n">info</span><span class="o">-&gt;</span><span class="n">iter</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>El archivo incluye además la función <code>mpc_motor_init</code>, que se llama una vez al inicio y deja en cero el punto de partida del solver. Ambas funciones usan la variable global <code>workspace</code> de OSQP. Esto tiene una consecuencia en el Paso 5: el modelo del controlador solo puede aparecer una vez en el modelo de prueba.</p>
+<h2 id="paso-4-crear-el-modelo-del-controlador">Paso 4: Crear el modelo del controlador</h2>
+<p>El modelo solo contiene el bloque C Function y sus puertos, porque todo el cálculo está en el código C.</p>
+<p>Cree un modelo nuevo llamado <code>mpc_ctrl.slx</code> en la carpeta del ejemplo. Agregue cuatro bloques Inport, un bloque C Function y dos bloques Outport, conectados como muestra la Figura 3. Configure el tiempo de muestreo de los cuatro Inport en 0.01 y la dimensión del Inport <code>x</code> en 2.</p>
+<p><img alt="Modelo del controlador" src="../img/modelo_mpc_ctrl.png" /></p>
+<p><em>Figura 3: Modelo mpc_ctrl con el bloque C Function.</em></p>
+<p>Abra el bloque C Function. En la tabla de puertos y parámetros, defina los símbolos de la Tabla 3. Cada símbolo con alcance Input crea un puerto de entrada y cada símbolo con alcance Output crea un puerto de salida (<a href="https://www.mathworks.com/help/simulink/slref/cfunction.html">C Function</a>).</p>
+<p><em>Tabla 3: Símbolos del bloque C Function.</em></p>
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Alcance (Scope)</th>
+<th>Puerto</th>
+<th>Tipo</th>
+<th>Tamaño</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>Input</td>
+<td>1</td>
+<td>double</td>
+<td>2</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>Input</td>
+<td>2</td>
+<td>double</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Imax</td>
+<td>Input</td>
+<td>3</td>
+<td>double</td>
+<td>1</td>
+</tr>
+<tr>
+<td>TL</td>
+<td>Input</td>
+<td>4</td>
+<td>double</td>
+<td>1</td>
+</tr>
+<tr>
+<td>V</td>
+<td>Output</td>
+<td>1</td>
+<td>double</td>
+<td>1</td>
+</tr>
+<tr>
+<td>iter</td>
+<td>Output</td>
+<td>2</td>
+<td>int32</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>En la sección Start code escriba la llamada de inicialización. El código de Start se ejecuta una sola vez al comenzar la simulación.</p>
+<div class="highlight"><pre><span></span><code><span class="n">mpc_motor_init</span><span class="p">();</span>
+</code></pre></div>
+<p>En la sección Output code escriba la llamada al controlador. El código de Output se ejecuta en cada paso de tiempo. La variable local <code>v</code> recibe la tensión y luego se copia a la salida <code>V</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">double</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
+<span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mpc_motor_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="n">Imax</span><span class="p">,</span><span class="w"> </span><span class="n">TL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span>
+<span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
+</code></pre></div>
+<p>Por último, indique de dónde toma el bloque su código propio (Custom Code Location). Haga clic en la flecha junto al ícono de engranaje, arriba a la derecha de la ventana del bloque, y seleccione Use Configuration Parameters Custom Code, como muestra la Figura 5. Con esa opción, el bloque toma los archivos C de la configuración del modelo, que se define en el Paso 5, en lugar de una configuración propia del bloque. Si se deja la opción por defecto, Use Block Custom Code, el bloque no encuentra <code>mpc_motor.h</code>.</p>
+<p><img alt="Bloque C Function con el código y la tabla de símbolos" src="../img/cfuntion_tabla.png" /></p>
+<p><em>Figura 4: Bloque C Function con el código de Output y los símbolos de la Tabla 3.</em></p>
+<p><img alt="Opción Custom Code Location del bloque C Function" src="../img/cfuntion_custom_code.png" /></p>
+<p><em>Figura 5: Menú del engranaje del bloque C Function con la opción Use Configuration Parameters Custom Code.</em></p>
+<h2 id="paso-5-configurar-el-modelo-del-controlador">Paso 5: Configurar el modelo del controlador</h2>
+<p>Configure la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.</p>
+<p><em>Tabla 4: Configuración adicional del modelo mpc_ctrl.</em></p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solver</td>
+<td>Type, Solver y Fixed-step size</td>
+<td>Fixed-step, discrete (no continuous states) y 0.01</td>
+</tr>
+<tr>
+<td>Model Referencing</td>
+<td>Total number of instances allowed per top model</td>
+<td>One</td>
+</tr>
+<tr>
+<td>Model Referencing</td>
+<td>Include custom code for referenced models</td>
+<td>Marcado</td>
+</tr>
+<tr>
+<td>Simulation Target y Code Generation &gt; Custom Code</td>
+<td>Include headers</td>
+<td><code>#include "mpc_motor.h"</code></td>
+</tr>
+<tr>
+<td>Simulation Target y Code Generation &gt; Custom Code</td>
+<td>Include directories</td>
+<td>La carpeta del ejemplo y la carpeta <code>osqp\include</code></td>
+</tr>
+<tr>
+<td>Simulation Target y Code Generation &gt; Custom Code</td>
+<td>Source files</td>
+<td><code>mpc_motor.c</code> y los diez archivos <code>.c</code> de <code>osqp\src</code></td>
+</tr>
+</tbody>
+</table>
+<p>Simulation Target y Custom Code llevan los mismos archivos: el primero se usa al simular en el computador y el segundo al generar código para la placa. En Include directories y Source files escriba las rutas completas, una por línea. La lista de fuentes incluye <code>workspace.c</code>, que está dentro de <code>osqp\src</code>.</p>
+<p>El número de instancias se limita a One porque OSQP guarda su estado en la variable global <code>workspace</code>. La opción Include custom code for referenced models se encuentra en Model Referencing, dentro de Advanced parameters.</p>
+<p><img alt="Archivos fuente en Simulation Target" src="../img/config_simulation_target.png" /></p>
+<p><em>Figura 6: Archivos fuente en el panel Simulation Target del modelo mpc_ctrl.</em></p>
+<p><img alt="Número de instancias en Model Referencing" src="../img/ModelReferencing.png" /></p>
+<p><em>Figura 7: Número de instancias del modelo limitado a One en Model Referencing.</em></p>
+<h2 id="paso-6-configurar-la-comunicacion">Paso 6: Configurar la comunicación</h2>
+<p>En cada paso, el computador envía a la placa el estado <span class="arithmatex">\(x[k]\)</span>, la referencia, el límite de corriente y el torque de carga, y recibe la tensión <span class="arithmatex">\(V[k]\)</span> y el número de iteraciones (Figura 1). Este intercambio ocurre por el puerto serial.</p>
+<p>Configure el puerto como se explica en la Guía 2: en <strong>Hardware Implementation &gt; Target hardware resources &gt; PIL</strong>, elija <strong>Serial</strong> en <strong>PIL communication interface</strong> y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.</p>
+<h2 id="paso-7-crear-el-modelo-de-prueba">Paso 7: Crear el modelo de prueba</h2>
+<p>Cree el modelo <code>lazo.slx</code> en la misma carpeta y aplique la configuración de placa, System target file y toolchain de la Guía 2, junto con la comunicación del Paso 6. La Figura 8 muestra el lazo cerrado que contiene.</p>
+<p>Un escalón entrega la referencia de velocidad, que sube a 1 rad/s en <span class="arithmatex">\(t = 0.1\)</span> s. Una constante fija el límite de corriente en 10 A, y otro escalón aplica un torque de carga de 0.005 N·m en <span class="arithmatex">\(t = 0.8\)</span> s. El bloque Model llama al controlador <code>mpc_ctrl</code>. La planta es un bloque Discrete State-Space con las matrices de la Ecuación 3, redondeadas a cuatro decimales: <span class="arithmatex">\(A = A_d\)</span>, <span class="arithmatex">\(B = [B_d\ \ B_{p,d}]\)</span>, <span class="arithmatex">\(C\)</span> igual a la identidad, <span class="arithmatex">\(D\)</span> igual a cero, condiciones iniciales cero y tiempo de muestreo 0.01. Tres Scope muestran <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(V\)</span> e <code>iter</code>.</p>
+<p>La matriz <span class="arithmatex">\(B\)</span> tiene dos columnas porque la planta recibe dos entradas: la tensión <span class="arithmatex">\(V\)</span> que entrega el MPC y el torque de carga <span class="arithmatex">\(T_L\)</span>. Por eso un bloque Mux junta <span class="arithmatex">\(V\)</span> y <span class="arithmatex">\(T_L\)</span> en un vector antes de la planta. La matriz <span class="arithmatex">\(C\)</span> es la identidad porque el controlador necesita los dos estados, de modo que la salida de la planta es el vector <span class="arithmatex">\(x = [\,i;\ \omega\,]\)</span>. Esa salida vuelve a la entrada <code>x</code> del bloque Model, lo que cierra el lazo.</p>
+<p><img alt="Modelo de prueba" src="../img/modelo_lazo.png" /></p>
+<p><em>Figura 8: Modelo lazo. El bloque MPC está en modo PIL.</em></p>
+<p>En Configuration Parameters del modelo <code>lazo.slx</code>, use Type Fixed-step, Solver ode4, Fixed-step size 0.001 y Stop time 1.5. Aunque el paso del modelo es de 1 ms, los bloques discretos se siguen ejecutando cada 10 ms.</p>
+<p>Igual que en la Guía 3, este modelo tiene un solo bloque Model, porque el Paso 5 limita el controlador a una sola instancia. La comparación se hace en el Paso 9, ejecutando la misma simulación dos veces.</p>
+<p>Antes de simular, active el registro de las señales <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(V\)</span> e <code>iter</code>. Haga clic derecho sobre cada línea y seleccione Log Selected Signals. En la Figura 8, las señales registradas muestran un ícono de antena.</p>
+<h2 id="paso-8-ejecutar-la-simulacion-pil">Paso 8: Ejecutar la simulación PIL</h2>
+<p>Configure el bloque Model en modo PIL (<a href="https://www.mathworks.com/help/ecoder/ug/configure-and-run-pil-simulation.html">Configure and Run PIL Simulation</a>):</p>
+<ol>
+<li>Haga clic derecho sobre el bloque y seleccione Block Parameters.</li>
+<li>En Simulation mode, seleccione Processor-in-the-loop (PIL).</li>
+<li>En Code interface, seleccione Model reference.</li>
+<li>Presione OK.</li>
+</ol>
+<p>Para medir cuánto tarda la placa en ejecutar el controlador, active la medición del tiempo de ejecución en el modelo <code>lazo.slx</code>. En Configuration Parameters &gt; Code Generation &gt; Verification, marque Measure task execution time, escriba <code>executionProfile</code> en Workspace variable y seleccione All data en Save options.</p>
+<p><img alt="Medición del tiempo de ejecución" src="../img/config_verification.png" /></p>
+<p><em>Figura 9: Opción Measure task execution time en Code Generation &gt; Verification.</em></p>
+<p>Conecte la placa y presione Run en la pestaña Simulation. Simulink genera el código del controlador, lo compila junto con <code>mpc_motor.c</code> y la librería OSQP, lo descarga a la placa y abre la comunicación por el puerto serial. La primera ejecución tarda alrededor de un minuto y medio, porque compila la librería completa.</p>
+<p>Use el botón Run de la pestaña Simulation. Si prefiere usar el SIL/PIL Manager, revise que System Under Test esté en Model blocks in SIL/PIL mode. Con la opción Top model, el SIL/PIL Manager trata el modelo superior como sistema bajo prueba, es decir, intenta llevar a la placa el lazo completo con la planta incluida, y la compilación falla.</p>
+<h2 id="paso-9-verificar-la-equivalencia-numerica">Paso 9: Verificar la equivalencia numérica</h2>
+<p>Como el modelo solo admite una instancia del controlador, la verificación se hace con dos ejecuciones del mismo modelo:</p>
+<ol>
+<li>Ponga el bloque Model en modo Normal y presione Run. Esta es la simulación de referencia, en que el código C corre en el computador.</li>
+<li>Ponga el bloque Model en modo Processor-in-the-loop (PIL) y presione Run. Esta es la simulación PIL.</li>
+<li>Ejecute <code>errores_mil_pil</code> en la ventana de comandos. El script toma las dos últimas ejecuciones guardadas en el Simulation Data Inspector y calcula, para cada señal registrada, la diferencia máxima entre ambas.</li>
+</ol>
+<p>Las dos ejecuciones también se pueden comparar en la pestaña Compare del Simulation Data Inspector (<a href="https://www.mathworks.com/help/simulink/ug/compare-simulation-data.html">Compare Simulation Data</a>).</p>
+<p>La Figura 10 muestra ambas simulaciones superpuestas. En las pruebas de este trabajo, el número de iteraciones de OSQP fue igual en los 151 pasos de las dos ejecuciones y la diferencia máxima en la tensión y en los estados fue cero.</p>
+<p><img alt="Resultados MIL y PIL" src="../img/resultado_mil_pil.png" /></p>
+<p><em>Figura 10: Velocidad, corriente, tensión e iteraciones de OSQP en la simulación normal (MIL) y en la simulación PIL.</em></p>
+<p>La respuesta muestra cómo actúan las restricciones. Cuando la referencia sube a 1 rad/s en <span class="arithmatex">\(t = 0.1\)</span> s, el MPC aplica la tensión máxima de 24 V hasta que la corriente llega a cerca de 10 A, con un pequeño sobrepaso cercano a 10.2 A, y luego mantiene la corriente en torno a ese límite mientras el motor acelera. En <span class="arithmatex">\(t = 0.8\)</span> s entra el torque de carga. Según la Ecuación 4, mantener 1 rad/s con esa carga requiere 10.5 A, más que el límite. Por eso la corriente se mantiene en torno a 10 A y la velocidad se estabiliza cerca de 0.95 rad/s, bajo la referencia. El gráfico inferior muestra que OSQP llega al máximo de 100 iteraciones aproximadamente entre <span class="arithmatex">\(t = 0.3\)</span> s y <span class="arithmatex">\(t = 1\)</span> s, y que después el número de iteraciones baja mientras la respuesta se estabiliza.</p>
+<h2 id="paso-10-medir-el-tiempo-de-ejecucion">Paso 10: Medir el tiempo de ejecución</h2>
+<p>Después de la simulación PIL, la variable <code>executionProfile</code> queda en el workspace. Para ver el informe, ejecute:</p>
+<div class="highlight"><pre><span></span><code><span class="n">report</span><span class="p">(</span><span class="n">executionProfile</span><span class="p">)</span>
+</code></pre></div>
+<p>El informe muestra el tiempo de ejecución medio y máximo de cada función del controlador. La Figura 11 muestra el tiempo de cada paso a lo largo de la simulación.</p>
+<p><img alt="Tiempo de ejecución en la STM32" src="../img/tiempos_stm32.png" /></p>
+<p><em>Figura 11: Tiempo de ejecución del controlador en la STM32 Nucleo F767ZI en cada paso.</em></p>
+<p>En las pruebas de este trabajo, el paso del controlador tardó 16.2 ms en promedio y 28.4 ms como máximo, mientras que el periodo de muestreo es de 10 ms. El tiempo sigue de cerca al número de iteraciones de la Figura 10: cuando OSQP necesita 100 iteraciones, el paso tarda cerca de 28 ms, y cuando necesita pocas iteraciones, baja de 2 ms.</p>
+<p>Este resultado no afecta la simulación PIL, porque PIL no se ejecuta en tiempo real: en cada paso, Simulink envía los datos, la placa ejecuta un paso del controlador y Simulink avanza al siguiente paso solo cuando recibe la respuesta (<a href="https://www.mathworks.com/help/ecoder/ug/about-sil-and-pil-simulations.html">SIL and PIL Simulations</a>). Sin embargo, indica que el controlador, tal como está, no alcanzaría a cumplir el periodo de 10 ms en una aplicación real. El código se compiló sin optimizaciones del compilador (opción -O0, visible en la ventana de diagnóstico). Las formas de reducir el tiempo son activar la optimización del compilador, reducir el máximo de iteraciones, acortar el horizonte o aumentar el periodo de muestreo. Esta guía no evalúa esas alternativas.</p>
+<p>Al completar esta guía, el lector cuenta con un controlador MPC con el solver OSQP ejecutándose en la STM32 Nucleo F767ZI mediante PIL, verificado contra la simulación en el computador y con su tiempo de ejecución medido en la placa.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
