@@ -102,7 +102,7 @@ Una vez instalado, abre su asistente *Hardware Setup* desde el **Add-On Manager*
 
 ### 4) Toolchain para Raspberry Pi 5
 
-La toolchain que usa PIL con la Raspberry Pi es **GNU GCC Embedded Linux**. Igual que en la STM32, se descarga con el asistente *Hardware Setup* del paquete de soporte, que además instala en la placa las dependencias necesarias. En el modelo solo se selecciona, como se indica en la Guía 1.2.
+La toolchain que usa PIL con la Raspberry Pi es **GNU GCC Embedded Linux**. Igual que en la STM32, se descarga con el asistente *Hardware Setup* del paquete de soporte, que además instala en la placa las dependencias necesarias. En el modelo solo se selecciona, como se indica en la Guía 2.
 
 ## Validación
 

@@ -1,4 +1,4 @@
-# Guía 2.1: Controlador PID con anti-windup con PIL en STM32 Nucleo F767ZI
+# Guía 3: Controlador PID con anti-windup con PIL en STM32 Nucleo F767ZI
 
 ## Objetivo
 
@@ -157,7 +157,7 @@ El bloque C Function conecta el modelo con el código en C. Al inicio llama a `p
 
 ## Paso 3: Configurar el modelo del controlador
 
-Configure el solver, la placa, el System target file y la toolchain como se explica en la [Guía 1.2](../Guia_1.2_Configuracion/Guia_1_2.md). Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.
+Configure el solver, la placa, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.
 
 *Tabla 2: Configuración adicional del modelo pid_aw_ctrl.*
 
@@ -176,11 +176,11 @@ El código propio se indica dos veces porque Simulation Target lo usa al simular
 
 En cada paso, el computador envía a la placa la referencia $r[k]$, la medición $y[k]$ y el vector de parámetros, y recibe de vuelta las señales $u[k]$ y $v[k]$ (Figura 1). Este intercambio ocurre por el puerto serial.
 
-Configure el puerto como se explica en la Guía 1.2: en **Hardware Implementation > Target hardware resources > PIL**, elija **Serial** en **PIL communication interface** y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.
+Configure el puerto como se explica en la Guía 2: en **Hardware Implementation > Target hardware resources > PIL**, elija **Serial** en **PIL communication interface** y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.
 
 ## Paso 5: Crear el modelo de prueba
 
-Cree el modelo `pid_aw_lazo.slx` en la misma carpeta, con los parámetros del Paso 1, cada uno en un bloque Constant, y utilice la configuración de la Guía 1.2. No necesita las opciones de la Tabla 2. La Figura 4 muestra el lazo cerrado que contiene.
+Cree el modelo `pid_aw_lazo.slx` en la misma carpeta, con los parámetros del Paso 1, cada uno en un bloque Constant, y utilice la configuración de la Guía 2. No necesita las opciones de la Tabla 2. La Figura 4 muestra el lazo cerrado que contiene.
 
 Un generador de pulsos entrega la referencia, que sube a 1 y vuelve a 0 de forma periódica. Un grupo de constantes guarda los valores de la Tabla 1 y los reúne en el vector `p`. El bloque Model llama al controlador `pid_aw_ctrl`, que recibe la referencia, la medición y ese vector. La señal saturada $u$ entra a la planta de la Ecuación 1, y su salida $y$ vuelve al controlador como medición. Dos Scope muestran la respuesta del lazo y las señales de control, y las señales $u$, $v$ e $y$ quedan registradas para revisarlas en el Simulation Data Inspector.
 

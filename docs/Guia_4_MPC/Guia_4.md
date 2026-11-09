@@ -1,4 +1,4 @@
-# Guía 3: Controlador predictivo (MPC) con PIL en STM32 Nucleo F767ZI
+# Guía 4: Controlador predictivo (MPC) con PIL en STM32 Nucleo F767ZI
 
 ## Objetivo
 
@@ -19,7 +19,7 @@ $$
 
 OSQP puede generar código C a la medida de un problema, sin asignación dinámica de memoria y sin dependencias de otras librerías, lo que permite compilarlo para un microcontrolador. El código de esta guía usa OSQP 0.6.2 y proviene del repositorio TiempoMPC.
 
-El controlador completo, es decir, la preparación del problema y la llamada a OSQP, está escrito en C y se integra con un bloque C Function, igual que en la Guía 2.1. Así, el mismo código C se ejecuta en el computador durante la simulación normal y en la placa durante la simulación PIL.
+El controlador completo, es decir, la preparación del problema y la llamada a OSQP, está escrito en C y se integra con un bloque C Function, igual que en la Guía 3. Así, el mismo código C se ejecuta en el computador durante la simulación normal y en la placa durante la simulación PIL.
 
 La simulación PIL usa el bloque Model. En modo PIL, el bloque Model genera código del modelo referenciado, lo compila para la placa y lo ejecuta en ella. La Figura 1 muestra la partición del lazo. El MPC, dentro del modelo `mpc_ctrl.slx`, corre en la STM32 Nucleo F767ZI. La planta, las referencias y la perturbación, dentro del modelo `lazo.slx`, corren en el computador. En cada paso, el computador envía a la placa el estado medido y las entradas del controlador, y la placa devuelve la tensión que se aplica al motor y el número de iteraciones del solver.
 
@@ -96,7 +96,7 @@ Para que OSQP pueda resolver la Ecuación 5, todas las incógnitas se agrupan en
 
 ## Paso 1: Obtener los archivos del controlador
 
-Descargue la carpeta `MPC_OSQP_simple` del repositorio de las guías [Link de repositorio]. La Tabla 2 describe su contenido.
+Descargue la carpeta `mpc_osqp` del [repositorio de las guías](https://github.com/julianNT/Ejemplos-uso-de-PIL). La Tabla 2 describe su contenido.
 
 *Tabla 2: Archivos del controlador MPC.*
 
@@ -218,15 +218,19 @@ iter = mpc_motor_step(x, ref, Imax, TL, &v);
 V = v;
 ```
 
-Por último, en la opción de ubicación del código propio del bloque (Custom Code Location), seleccione Configuration Parameters. Con esa opción, el bloque toma los archivos C de la configuración del modelo, que se define en el Paso 5, en lugar de una configuración propia del bloque. Si se deja la opción por defecto, el bloque no encuentra `mpc_motor.h`.
+Por último, indique de dónde toma el bloque su código propio (Custom Code Location). Haga clic en la flecha junto al ícono de engranaje, arriba a la derecha de la ventana del bloque, y seleccione Use Configuration Parameters Custom Code, como muestra la Figura 5. Con esa opción, el bloque toma los archivos C de la configuración del modelo, que se define en el Paso 5, en lugar de una configuración propia del bloque. Si se deja la opción por defecto, Use Block Custom Code, el bloque no encuentra `mpc_motor.h`.
 
-[AGREGAR IMAGEN: captura del bloque C Function abierto, mostrando la tabla de símbolos de la Tabla 3 y las secciones Start code y Output code]
+![Bloque C Function con el código y la tabla de símbolos](img/cfuntion_tabla.png)
 
-[AGREGAR IMAGEN: captura de la opción Custom Code Location del bloque C Function en Configuration Parameters]
+*Figura 4: Bloque C Function con el código de Output y los símbolos de la Tabla 3.*
+
+![Opción Custom Code Location del bloque C Function](img/cfuntion_custom_code.png)
+
+*Figura 5: Menú del engranaje del bloque C Function con la opción Use Configuration Parameters Custom Code.*
 
 ## Paso 5: Configurar el modelo del controlador
 
-Configure la placa, el System target file y la toolchain como se explica en la [Guía 1.2](../Guia_1.2_Configuracion/Guia_1_2.md). Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.
+Configure la placa, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.
 
 *Tabla 4: Configuración adicional del modelo mpc_ctrl.*
 
@@ -243,19 +247,23 @@ Simulation Target y Custom Code llevan los mismos archivos: el primero se usa al
 
 El número de instancias se limita a One porque OSQP guarda su estado en la variable global `workspace`. La opción Include custom code for referenced models se encuentra en Model Referencing, dentro de Advanced parameters.
 
-[AGREGAR IMAGEN: captura de Configuration Parameters > Simulation Target con Include headers, Include directories y Source files completos]
+![Archivos fuente en Simulation Target](img/config_simulation_target.png)
 
-[AGREGAR IMAGEN: captura de Configuration Parameters > Model Referencing con Total number of instances allowed per top model en One]
+*Figura 6: Archivos fuente en el panel Simulation Target del modelo mpc_ctrl.*
+
+![Número de instancias en Model Referencing](img/ModelReferencing.png)
+
+*Figura 7: Número de instancias del modelo limitado a One en Model Referencing.*
 
 ## Paso 6: Configurar la comunicación
 
 En cada paso, el computador envía a la placa el estado $x[k]$, la referencia, el límite de corriente y el torque de carga, y recibe la tensión $V[k]$ y el número de iteraciones (Figura 1). Este intercambio ocurre por el puerto serial.
 
-Configure el puerto como se explica en la Guía 1.2: en **Hardware Implementation > Target hardware resources > PIL**, elija **Serial** en **PIL communication interface** y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.
+Configure el puerto como se explica en la Guía 2: en **Hardware Implementation > Target hardware resources > PIL**, elija **Serial** en **PIL communication interface** y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.
 
 ## Paso 7: Crear el modelo de prueba
 
-Cree el modelo `lazo.slx` en la misma carpeta y aplique la configuración de placa, System target file y toolchain de la Guía 1.2, junto con la comunicación del Paso 6. La Figura 4 muestra el lazo cerrado que contiene.
+Cree el modelo `lazo.slx` en la misma carpeta y aplique la configuración de placa, System target file y toolchain de la Guía 2, junto con la comunicación del Paso 6. La Figura 8 muestra el lazo cerrado que contiene.
 
 Un escalón entrega la referencia de velocidad, que sube a 1 rad/s en $t = 0.1$ s. Una constante fija el límite de corriente en 10 A, y otro escalón aplica un torque de carga de 0.005 N·m en $t = 0.8$ s. El bloque Model llama al controlador `mpc_ctrl`. La planta es un bloque Discrete State-Space con las matrices de la Ecuación 3, redondeadas a cuatro decimales: $A = A_d$, $B = [B_d\ \ B_{p,d}]$, $C$ igual a la identidad, $D$ igual a cero, condiciones iniciales cero y tiempo de muestreo 0.01. Tres Scope muestran $x$, $V$ e `iter`.
 
@@ -263,13 +271,13 @@ La matriz $B$ tiene dos columnas porque la planta recibe dos entradas: la tensi�
 
 ![Modelo de prueba](img/modelo_lazo.png)
 
-*Figura 4: Modelo lazo. El bloque MPC está en modo PIL.*
+*Figura 8: Modelo lazo. El bloque MPC está en modo PIL.*
 
 En Configuration Parameters del modelo `lazo.slx`, use Type Fixed-step, Solver ode4, Fixed-step size 0.001 y Stop time 1.5. Aunque el paso del modelo es de 1 ms, los bloques discretos se siguen ejecutando cada 10 ms.
 
-Igual que en la Guía 2.1, este modelo tiene un solo bloque Model, porque el Paso 5 limita el controlador a una sola instancia. La comparación se hace en el Paso 9, ejecutando la misma simulación dos veces.
+Igual que en la Guía 3, este modelo tiene un solo bloque Model, porque el Paso 5 limita el controlador a una sola instancia. La comparación se hace en el Paso 9, ejecutando la misma simulación dos veces.
 
-Antes de simular, active el registro de las señales $x$, $V$ e `iter`. Haga clic derecho sobre cada línea y seleccione Log Selected Signals. En la Figura 4, las señales registradas muestran un ícono de antena.
+Antes de simular, active el registro de las señales $x$, $V$ e `iter`. Haga clic derecho sobre cada línea y seleccione Log Selected Signals. En la Figura 8, las señales registradas muestran un ícono de antena.
 
 ## Paso 8: Ejecutar la simulación PIL
 
@@ -282,13 +290,15 @@ Configure el bloque Model en modo PIL ([Configure and Run PIL Simulation](https:
 
 Para medir cuánto tarda la placa en ejecutar el controlador, active la medición del tiempo de ejecución en el modelo `lazo.slx`. En Configuration Parameters > Code Generation > Verification, marque Measure task execution time, escriba `executionProfile` en Workspace variable y seleccione All data en Save options.
 
-[AGREGAR IMAGEN: captura de Configuration Parameters > Code Generation > Verification con Measure task execution time marcado]
+![Medición del tiempo de ejecución](img/config_verification.png)
+
+*Figura 9: Opción Measure task execution time en Code Generation > Verification.*
 
 Conecte la placa y presione Run en la pestaña Simulation. Simulink genera el código del controlador, lo compila junto con `mpc_motor.c` y la librería OSQP, lo descarga a la placa y abre la comunicación por el puerto serial. La primera ejecución tarda alrededor de un minuto y medio, porque compila la librería completa.
 
 Use el botón Run de la pestaña Simulation. Si prefiere usar el SIL/PIL Manager, revise que System Under Test esté en Model blocks in SIL/PIL mode. Con la opción Top model, el SIL/PIL Manager trata el modelo superior como sistema bajo prueba, es decir, intenta llevar a la placa el lazo completo con la planta incluida, y la compilación falla.
 
-[AGREGAR IMAGEN: captura de la ventana de diagnóstico al terminar la compilación, con la línea "Downloading executable to the hardware"]
+
 
 ## Paso 9: Verificar la equivalencia numérica
 
@@ -300,11 +310,11 @@ Como el modelo solo admite una instancia del controlador, la verificación se ha
 
 Las dos ejecuciones también se pueden comparar en la pestaña Compare del Simulation Data Inspector ([Compare Simulation Data](https://www.mathworks.com/help/simulink/ug/compare-simulation-data.html)).
 
-La Figura 5 muestra ambas simulaciones superpuestas. En las pruebas de este trabajo, el número de iteraciones de OSQP fue igual en los 151 pasos de las dos ejecuciones y la diferencia máxima en la tensión y en los estados fue cero.
+La Figura 10 muestra ambas simulaciones superpuestas. En las pruebas de este trabajo, el número de iteraciones de OSQP fue igual en los 151 pasos de las dos ejecuciones y la diferencia máxima en la tensión y en los estados fue cero.
 
 ![Resultados MIL y PIL](img/resultado_mil_pil.png)
 
-*Figura 5: Velocidad, corriente, tensión e iteraciones de OSQP en la simulación normal (MIL) y en la simulación PIL.*
+*Figura 10: Velocidad, corriente, tensión e iteraciones de OSQP en la simulación normal (MIL) y en la simulación PIL.*
 
 La respuesta muestra cómo actúan las restricciones. Cuando la referencia sube a 1 rad/s en $t = 0.1$ s, el MPC aplica la tensión máxima de 24 V hasta que la corriente llega a cerca de 10 A, con un pequeño sobrepaso cercano a 10.2 A, y luego mantiene la corriente en torno a ese límite mientras el motor acelera. En $t = 0.8$ s entra el torque de carga. Según la Ecuación 4, mantener 1 rad/s con esa carga requiere 10.5 A, más que el límite. Por eso la corriente se mantiene en torno a 10 A y la velocidad se estabiliza cerca de 0.95 rad/s, bajo la referencia. El gráfico inferior muestra que OSQP llega al máximo de 100 iteraciones aproximadamente entre $t = 0.3$ s y $t = 1$ s, y que después el número de iteraciones baja mientras la respuesta se estabiliza.
 
@@ -316,13 +326,13 @@ Después de la simulación PIL, la variable `executionProfile` queda en el works
 report(executionProfile)
 ```
 
-El informe muestra el tiempo de ejecución medio y máximo de cada función del controlador. La Figura 6 muestra el tiempo de cada paso a lo largo de la simulación.
+El informe muestra el tiempo de ejecución medio y máximo de cada función del controlador. La Figura 11 muestra el tiempo de cada paso a lo largo de la simulación.
 
 ![Tiempo de ejecución en la STM32](img/tiempos_stm32.png)
 
-*Figura 6: Tiempo de ejecución del controlador en la STM32 Nucleo F767ZI en cada paso.*
+*Figura 11: Tiempo de ejecución del controlador en la STM32 Nucleo F767ZI en cada paso.*
 
-En las pruebas de este trabajo, el paso del controlador tardó 16.2 ms en promedio y 28.4 ms como máximo, mientras que el periodo de muestreo es de 10 ms. El tiempo sigue de cerca al número de iteraciones de la Figura 5: cuando OSQP necesita 100 iteraciones, el paso tarda cerca de 28 ms, y cuando necesita pocas iteraciones, baja de 2 ms.
+En las pruebas de este trabajo, el paso del controlador tardó 16.2 ms en promedio y 28.4 ms como máximo, mientras que el periodo de muestreo es de 10 ms. El tiempo sigue de cerca al número de iteraciones de la Figura 10: cuando OSQP necesita 100 iteraciones, el paso tarda cerca de 28 ms, y cuando necesita pocas iteraciones, baja de 2 ms.
 
 Este resultado no afecta la simulación PIL, porque PIL no se ejecuta en tiempo real: en cada paso, Simulink envía los datos, la placa ejecuta un paso del controlador y Simulink avanza al siguiente paso solo cuando recibe la respuesta ([SIL and PIL Simulations](https://www.mathworks.com/help/ecoder/ug/about-sil-and-pil-simulations.html)). Sin embargo, indica que el controlador, tal como está, no alcanzaría a cumplir el periodo de 10 ms en una aplicación real. El código se compiló sin optimizaciones del compilador (opción -O0, visible en la ventana de diagnóstico). Las formas de reducir el tiempo son activar la optimización del compilador, reducir el máximo de iteraciones, acortar el horizonte o aumentar el periodo de muestreo. Esta guía no evalúa esas alternativas.
 

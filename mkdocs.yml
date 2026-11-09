@@ -7,11 +7,8 @@ theme:
 nav:
   - Home: index.md
   - Guía 1: Guia_1_Instalacion/Guia_1.md
-  - Guía 1.2: Guia_1.2_Configuracion/Guia_1_2.md
-  - Guía 2.1: Guia_2.1_PID_AntiWindup/Guia_2_1.md
-
-exclude_docs: |
-  Guia_3_MPC/
+  - Guía 2: Guia_2_Configuracion/Guia_2.md
+  - Guía 3: Guia_3_PID_AntiWindup/Guia_3.md
 
 markdown_extensions:
   - admonition

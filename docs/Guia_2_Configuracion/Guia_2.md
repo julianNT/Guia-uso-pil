@@ -1,4 +1,4 @@
-# Guía 1.2: Configuración de las plataformas para PIL
+# Guía 2: Configuración de las plataformas para PIL
  
 ## Objetivo
  
