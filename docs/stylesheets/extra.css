@@ -1,0 +1,6 @@
+/* Oculta el titulo del sitio sobre el menu lateral (solo en pantallas anchas) */
+@media screen and (min-width: 76.25em) {
+  .md-nav--primary > .md-nav__title {
+    display: none;
+  }
+}
