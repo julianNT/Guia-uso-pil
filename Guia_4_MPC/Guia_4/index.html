@@ -480,10 +480,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-6-configurar-la-comunicacion" class="md-nav__link">
+  <a href="#paso-6-comunicacion-con-la-placa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 6: Configurar la comunicación
+        Paso 6: Comunicación con la placa
       
     </span>
   </a>
@@ -685,10 +685,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-6-configurar-la-comunicacion" class="md-nav__link">
+  <a href="#paso-6-comunicacion-con-la-placa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 6: Configurar la comunicación
+        Paso 6: Comunicación con la placa
       
     </span>
   </a>
@@ -1032,7 +1032,7 @@ python generar_mpc_motor.py
 <p><img alt="Opción Custom Code Location del bloque C Function" src="../img/cfuntion_custom_code.png" /></p>
 <p><em>Figura 5: Opción Custom Code Location del bloque C Function.</em></p>
 <h2 id="paso-5-configurar-el-modelo-del-controlador">Paso 5: Configurar el modelo del controlador</h2>
-<p>Configure el solver, la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.</p>
+<p>Configure el solver, la placa, la comunicación, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.</p>
 <p><em>Tabla 4: Configuración adicional del modelo mpc_ctrl.</em></p>
 <table>
 <thead>
@@ -1076,11 +1076,10 @@ python generar_mpc_motor.py
 <p><em>Figura 6: Archivos fuente en Simulation Target.</em></p>
 <p><img alt="Número de instancias en Model Referencing" src="../img/ModelReferencing.png" /></p>
 <p><em>Figura 7: Número de instancias en Model Referencing.</em></p>
-<h2 id="paso-6-configurar-la-comunicacion">Paso 6: Configurar la comunicación</h2>
-<p>En cada paso, el computador envía a la placa el estado <span class="arithmatex">\(x[k]\)</span>, la referencia, el límite de corriente y el torque de carga, y recibe la tensión <span class="arithmatex">\(V[k]\)</span> y el número de iteraciones (Figura 1). Este intercambio ocurre por el puerto serial.</p>
-<p>Configure el puerto como se explica en la Guía 2: en <strong>Hardware Implementation &gt; Target hardware resources &gt; PIL</strong>, elija <strong>Serial</strong> en <strong>PIL communication interface</strong> y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.</p>
+<h2 id="paso-6-comunicacion-con-la-placa">Paso 6: Comunicación con la placa</h2>
+<p>En cada paso, el computador envía a la placa el estado <span class="arithmatex">\(x[k]\)</span>, la referencia, el límite de corriente y el torque de carga, y recibe la tensión <span class="arithmatex">\(V[k]\)</span> y el número de iteraciones (Figura 1). Este intercambio ocurre por el puerto serial configurado en el Paso 5.</p>
 <h2 id="paso-7-crear-el-modelo-de-prueba">Paso 7: Crear el modelo de prueba</h2>
-<p>Cree el modelo <code>lazo.slx</code> en la misma carpeta y aplique la configuración de placa, System target file y toolchain de la Guía 2, junto con la comunicación del Paso 6. La Figura 8 muestra el lazo cerrado que contiene.</p>
+<p>Cree el modelo <code>lazo.slx</code> en la misma carpeta y aplique la configuración de la Guía 2. La Figura 8 muestra el lazo cerrado que contiene.</p>
 <p>Un escalón entrega la referencia de velocidad, que sube a 1 rad/s en <span class="arithmatex">\(t = 0.1\)</span> s. Una constante fija el límite de corriente en 10 A, y otro escalón aplica un torque de carga de 0.005 N·m en <span class="arithmatex">\(t = 0.8\)</span> s. El bloque Model llama al controlador <code>mpc_ctrl</code>. La planta es un bloque Discrete State-Space con las matrices de la Ecuación 3, redondeadas a cuatro decimales: <span class="arithmatex">\(A = A_d\)</span>, <span class="arithmatex">\(B = [B_d\ \ B_{p,d}]\)</span>, <span class="arithmatex">\(C\)</span> igual a la identidad, <span class="arithmatex">\(D\)</span> igual a cero, condiciones iniciales cero y tiempo de muestreo 0.01. Tres Scope muestran <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(V\)</span> e <code>iter</code>.</p>
 <p>La matriz <span class="arithmatex">\(B\)</span> tiene dos columnas porque la planta recibe dos entradas: la tensión <span class="arithmatex">\(V\)</span> que entrega el MPC y el torque de carga <span class="arithmatex">\(T_L\)</span>. Por eso un bloque Mux junta <span class="arithmatex">\(V\)</span> y <span class="arithmatex">\(T_L\)</span> en un vector antes de la planta. La matriz <span class="arithmatex">\(C\)</span> es la identidad porque el controlador necesita los dos estados, de modo que la salida de la planta es el vector <span class="arithmatex">\(x = [\,i;\ \omega\,]\)</span>. Esa salida vuelve a la entrada <code>x</code> del bloque Model, lo que cierra el lazo.</p>
 <p><img alt="Modelo de prueba" src="../img/modelo_lazo.png" /></p>

@@ -783,7 +783,6 @@
 <p>Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en <em>Puertos (COM y LPT)</em>. Luego, en <strong>Hardware Implementation &gt; Target hardware resources</strong>, entra a la pestaña <strong>PIL</strong>. En <strong>PIL communication interface</strong>, elige <strong>Serial</strong> y, en <strong>Serial port</strong>, escribe el COM anotado.</p>
 <p><img alt="Pestaña PIL con la interfaz Serial y el puerto COM3" src="../img/image-8.png" /></p>
 <p><em>Figura 4: Pestaña PIL de la STM32.</em></p>
-<p>Indica también el mismo COM en la pestaña <strong>External mode</strong>.</p>
 <h3 id="paso-3-seleccionar-el-system-target-file-y-la-toolchain">Paso 3: Seleccionar el System target file y la toolchain</h3>
 <p>Para poder usar PIL, en <strong>Code Generation &gt; System target file</strong> selecciona <code>ert.tlc</code>, que corresponde a Embedded Coder.</p>
 <p>La toolchain es el compilador que Simulink usa para construir el código generado. En <strong>Code Generation &gt; Toolchain</strong>, selecciona <strong>GNU Tools for ARM Embedded Processors</strong>, la que instaló el asistente en la Guía 1.</p>

@@ -444,10 +444,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-configurar-la-comunicacion" class="md-nav__link">
+  <a href="#paso-4-comunicacion-con-la-placa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 4: Configurar la comunicación
+        Paso 4: Comunicación con la placa
       
     </span>
   </a>
@@ -654,10 +654,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-configurar-la-comunicacion" class="md-nav__link">
+  <a href="#paso-4-comunicacion-con-la-placa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Paso 4: Configurar la comunicación
+        Paso 4: Comunicación con la placa
       
     </span>
   </a>
@@ -881,7 +881,7 @@ x_f[k+1] = x_f[k] + \frac{T_s}{T_f}\left(e[k] - x_f[k]\right) \tag{7}
 <p><img alt="Ventana del bloque C Function con la llamada a pid_aw_step" src="../img/figura3_cfuntion.png" /></p>
 <p><em>Figura 3: Configuración del bloque C Function.</em></p>
 <h2 id="paso-3-configurar-el-modelo-del-controlador">Paso 3: Configurar el modelo del controlador</h2>
-<p>Configure el solver, la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.</p>
+<p>Configure el solver, la placa, la comunicación, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.</p>
 <p><em>Tabla 2: Configuración adicional del modelo pid_aw_ctrl.</em></p>
 <table>
 <thead>
@@ -920,9 +920,9 @@ x_f[k+1] = x_f[k] + \frac{T_s}{T_f}\left(e[k] - x_f[k]\right) \tag{7}
 </tbody>
 </table>
 <p>El código propio se indica dos veces porque Simulation Target lo usa al simular en el computador y Custom Code lo usa al generar el código para la placa.</p>
-<h2 id="paso-4-configurar-la-comunicacion">Paso 4: Configurar la comunicación</h2>
-<p>En cada paso, el computador envía a la placa la referencia <span class="arithmatex">\(r[k]\)</span>, la medición <span class="arithmatex">\(y[k]\)</span> y el vector de parámetros, y recibe de vuelta las señales <span class="arithmatex">\(u[k]\)</span> y <span class="arithmatex">\(v[k]\)</span> (Figura 1). Este intercambio ocurre por el puerto serial.</p>
-<p>Configure el puerto como se explica en la Guía 2: en <strong>Hardware Implementation &gt; Target hardware resources &gt; PIL</strong>, elija <strong>Serial</strong> en <strong>PIL communication interface</strong> y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.</p>
+<p>El número de instancias se limita a One porque los estados del controlador, <code>I</code> y <code>xf</code>, son variables <code>static</code> en <code>pid_aw.c</code>. Si dos bloques Model usaran el mismo controlador, compartirían esos estados y cada uno sobrescribiría los del otro.</p>
+<h2 id="paso-4-comunicacion-con-la-placa">Paso 4: Comunicación con la placa</h2>
+<p>En cada paso, el computador envía a la placa la referencia <span class="arithmatex">\(r[k]\)</span>, la medición <span class="arithmatex">\(y[k]\)</span> y el vector de parámetros, y recibe de vuelta las señales <span class="arithmatex">\(u[k]\)</span> y <span class="arithmatex">\(v[k]\)</span> (Figura 1). Este intercambio ocurre por el puerto serial configurado en el Paso 3.</p>
 <h2 id="paso-5-crear-el-modelo-de-prueba">Paso 5: Crear el modelo de prueba</h2>
 <p>Cree el modelo <code>pid_aw_lazo.slx</code> en la misma carpeta, con los parámetros del Paso 1, cada uno en un bloque Constant, y utilice la configuración de la Guía 2. No necesita las opciones de la Tabla 2. La Figura 4 muestra el lazo cerrado que contiene.</p>
 <p>Un generador de pulsos entrega la referencia, que sube a 1 y vuelve a 0 de forma periódica. Un grupo de constantes guarda los valores de la Tabla 1 y los reúne en el vector <code>p</code>. El bloque Model llama al controlador <code>pid_aw_ctrl</code>, que recibe la referencia, la medición y ese vector. La señal saturada <span class="arithmatex">\(u\)</span> entra a la planta de la Ecuación 1, y su salida <span class="arithmatex">\(y\)</span> vuelve al controlador como medición. Dos Scope muestran la respuesta del lazo y las señales de control, y las señales <span class="arithmatex">\(u\)</span>, <span class="arithmatex">\(v\)</span> e <span class="arithmatex">\(y\)</span> quedan registradas para revisarlas en el Simulation Data Inspector.</p>
@@ -941,7 +941,7 @@ x_f[k+1] = x_f[k] + \frac{T_s}{T_f}\left(e[k] - x_f[k]\right) \tag{7}
 <p><img alt="Referencia r y salida y del lazo en la simulación PIL" src="../img/figure5_respuesta_pil.png" /></p>
 <p><em>Figura 5: Respuesta del lazo en la simulación PIL.</em></p>
 <h2 id="paso-7-verificar-la-equivalencia-numerica">Paso 7: Verificar la equivalencia numérica</h2>
-<p>Como el controlador admite una sola instancia, no se pueden tener dos lazos en paralelo con el mismo controlador. La comparación se hace con dos ejecuciones del mismo modelo:</p>
+<p>Como el controlador admite una sola instancia (Paso 3), no se pueden tener dos lazos en paralelo con el mismo controlador. La comparación se hace con dos ejecuciones del mismo modelo:</p>
 <ol>
 <li>Ejecute la simulación en modo PIL, como en el Paso 6.</li>
 <li>Cambie el Simulation mode del bloque Model a Normal y ejecute de nuevo.</li>
