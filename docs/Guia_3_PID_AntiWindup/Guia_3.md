@@ -32,7 +32,7 @@ Todo actuador tiene un límite. Cuando el controlador pide más de lo que el act
 
 ### Controlador
 
-El controlador es un PID paralelo con derivada filtrada, saturación y anti-windup por back-calculation. Este método realimenta al integrador la diferencia entre la señal saturada y la señal sin saturar ([Discrete PID Controller](https://www.mathworks.com/help/simulink/slref/discretepidcontroller.html)). En tiempo continuo, el controlador y su integrador se describen con la Ecuación 2.
+El controlador es un PID paralelo con derivada filtrada, saturación y anti-windup por back-calculation. Este método realimenta al integrador la diferencia entre la señal saturada y la señal sin saturar. En tiempo continuo, el controlador y su integrador se describen con la Ecuación 2.
 
 $$
 C(s) = K_p + \frac{K_i}{s} + \frac{K_d\, s}{T_f s + 1}, \quad \dot{I} = K_i e + K_b (u - v) \tag{2}
@@ -79,7 +79,15 @@ Los parámetros no se escriben dentro del controlador. Se entregan como un vecto
 | p[6]     | umin      | -1.5  | Límite inferior de la señal     |
 | p[7]     | umax      | 1.5   | Límite superior de la señal     |
 
-El periodo de muestreo y los coeficientes de la planta se definen como variables del workspace. Para que se carguen al abrir los modelos, se escriben en el callback PreLoadFcn de cada uno: `Ts` y `tau`, con los valores del caso de estudio, y `ad` y `bd`, calculados como en la Ecuación 1.
+El periodo de muestreo y los coeficientes de la planta se definen como variables del workspace: `Ts` y `tau`, con los valores del caso de estudio, y `ad` y `bd`, calculados como en la Ecuación 1. Para que se carguen solas al abrir los modelos, se escriben en el callback PreLoadFcn de cada uno, que MATLAB ejecuta antes de cargar el modelo. Se encuentra en **Modeling > Model Settings > Model Properties**, pestaña **Callbacks**:
+
+```matlab
+Ts = 1e-3; tau = 0.01; ad = exp(-Ts/tau); bd = 1 - ad;
+```
+
+El callback se ejecuta solo al abrir el modelo. Después de escribirlo, cierre y vuelva a abrir el modelo, o ejecute la línea una vez en la Command Window.
+
+`Ts` es el único periodo de muestreo del ejemplo: lo usan los bloques de los dos modelos y el controlador, que lo recibe como el elemento `p[5]`.
 
 ## Paso 2: Crear el modelo del controlador
 

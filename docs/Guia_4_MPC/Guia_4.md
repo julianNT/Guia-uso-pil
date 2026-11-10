@@ -222,21 +222,20 @@ Por último, indique de dónde toma el bloque su código propio (Custom Code Loc
 
 ![Bloque C Function con el código y la tabla de símbolos](img/cfuntion_tabla.png)
 
-*Figura 4: Bloque C Function con el código de Output y los símbolos de la Tabla 3.*
+*Figura 4: Configuración del bloque C Function.*
 
 ![Opción Custom Code Location del bloque C Function](img/cfuntion_custom_code.png)
 
-*Figura 5: Menú del engranaje del bloque C Function con la opción Use Configuration Parameters Custom Code.*
+*Figura 5: Opción Custom Code Location del bloque C Function.*
 
 ## Paso 5: Configurar el modelo del controlador
 
-Configure la placa, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.
+Configure el solver, la placa, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.
 
 *Tabla 4: Configuración adicional del modelo mpc_ctrl.*
 
 | Panel | Parámetro | Valor |
 | --- | --- | --- |
-| Solver | Type, Solver y Fixed-step size | Fixed-step, discrete (no continuous states) y 0.01 |
 | Model Referencing | Total number of instances allowed per top model | One |
 | Model Referencing | Include custom code for referenced models | Marcado |
 | Simulation Target y Code Generation > Custom Code | Include headers | `#include "mpc_motor.h"` |
@@ -249,11 +248,11 @@ El número de instancias se limita a One porque OSQP guarda su estado en la vari
 
 ![Archivos fuente en Simulation Target](img/config_simulation_target.png)
 
-*Figura 6: Archivos fuente en el panel Simulation Target del modelo mpc_ctrl.*
+*Figura 6: Archivos fuente en Simulation Target.*
 
 ![Número de instancias en Model Referencing](img/ModelReferencing.png)
 
-*Figura 7: Número de instancias del modelo limitado a One en Model Referencing.*
+*Figura 7: Número de instancias en Model Referencing.*
 
 ## Paso 6: Configurar la comunicación
 
@@ -271,9 +270,9 @@ La matriz $B$ tiene dos columnas porque la planta recibe dos entradas: la tensi�
 
 ![Modelo de prueba](img/modelo_lazo.png)
 
-*Figura 8: Modelo lazo. El bloque MPC está en modo PIL.*
+*Figura 8: Modelo de prueba lazo.*
 
-En Configuration Parameters del modelo `lazo.slx`, use Type Fixed-step, Solver ode4, Fixed-step size 0.001 y Stop time 1.5. Aunque el paso del modelo es de 1 ms, los bloques discretos se siguen ejecutando cada 10 ms.
+En Configuration Parameters del modelo `lazo.slx`, fije Stop time en 1.5 s, que es la duración de la prueba.
 
 Igual que en la Guía 3, este modelo tiene un solo bloque Model, porque el Paso 5 limita el controlador a una sola instancia. La comparación se hace en el Paso 9, ejecutando la misma simulación dos veces.
 
@@ -292,7 +291,7 @@ Para medir cuánto tarda la placa en ejecutar el controlador, active la medició
 
 ![Medición del tiempo de ejecución](img/config_verification.png)
 
-*Figura 9: Opción Measure task execution time en Code Generation > Verification.*
+*Figura 9: Medición del tiempo de ejecución en Verification.*
 
 Conecte la placa y presione Run en la pestaña Simulation. Simulink genera el código del controlador, lo compila junto con `mpc_motor.c` y la librería OSQP, lo descarga a la placa y abre la comunicación por el puerto serial. La primera ejecución tarda alrededor de un minuto y medio, porque compila la librería completa.
 
@@ -314,7 +313,7 @@ La Figura 10 muestra ambas simulaciones superpuestas. En las pruebas de este tra
 
 ![Resultados MIL y PIL](img/resultado_mil_pil.png)
 
-*Figura 10: Velocidad, corriente, tensión e iteraciones de OSQP en la simulación normal (MIL) y en la simulación PIL.*
+*Figura 10: Respuesta del lazo en las simulaciones normal (MIL) y PIL.*
 
 La respuesta muestra cómo actúan las restricciones. Cuando la referencia sube a 1 rad/s en $t = 0.1$ s, el MPC aplica la tensión máxima de 24 V hasta que la corriente llega a cerca de 10 A, con un pequeño sobrepaso cercano a 10.2 A, y luego mantiene la corriente en torno a ese límite mientras el motor acelera. En $t = 0.8$ s entra el torque de carga. Según la Ecuación 4, mantener 1 rad/s con esa carga requiere 10.5 A, más que el límite. Por eso la corriente se mantiene en torno a 10 A y la velocidad se estabiliza cerca de 0.95 rad/s, bajo la referencia. El gráfico inferior muestra que OSQP llega al máximo de 100 iteraciones aproximadamente entre $t = 0.3$ s y $t = 1$ s, y que después el número de iteraciones baja mientras la respuesta se estabiliza.
 
@@ -330,7 +329,7 @@ El informe muestra el tiempo de ejecución medio y máximo de cada función del 
 
 ![Tiempo de ejecución en la STM32](img/tiempos_stm32.png)
 
-*Figura 11: Tiempo de ejecución del controlador en la STM32 Nucleo F767ZI en cada paso.*
+*Figura 11: Tiempo de ejecución del controlador en la STM32.*
 
 En las pruebas de este trabajo, el paso del controlador tardó 16.2 ms en promedio y 28.4 ms como máximo, mientras que el periodo de muestreo es de 10 ms. El tiempo sigue de cerca al número de iteraciones de la Figura 10: cuando OSQP necesita 100 iteraciones, el paso tarda cerca de 28 ms, y cuando necesita pocas iteraciones, baja de 2 ms.
 

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 440" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#222">
+  <title>Modelo de prueba simulado en el computador y modelo del controlador ejecutado en la placa</title>
+  <defs>
+    <marker id="flecha" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#222"/>
+    </marker>
+  </defs>
+  <rect width="1120" height="440" fill="#fff"/>
+
+  <!-- Particion -->
+  <g fill="none" stroke="#777" stroke-width="1.5" stroke-dasharray="7 6">
+    <rect x="30" y="40" width="700" height="380" rx="6"/>
+    <rect x="820" y="150" width="270" height="200" rx="6"/>
+  </g>
+  <g font-size="18" fill="#555">
+    <text x="42" y="66">Computador</text>
+    <text x="832" y="176">Placa</text>
+  </g>
+
+  <!-- Modelos -->
+  <g fill="none" stroke="#222" stroke-width="2.5">
+    <rect x="60" y="90" width="640" height="300" rx="4"/>
+    <rect x="850" y="195" width="210" height="130" rx="4"/>
+  </g>
+  <g font-size="20" font-weight="bold">
+    <text x="80" y="122">Modelo de prueba</text>
+  </g>
+  <g text-anchor="middle" font-weight="bold" font-size="20">
+    <text x="955" y="253">Modelo del</text>
+    <text x="955" y="279">controlador</text>
+  </g>
+
+  <!-- Bloques del modelo de prueba -->
+  <g fill="#fff" stroke="#222" stroke-width="2">
+    <rect x="90" y="200" width="150" height="80"/>
+    <rect x="300" y="180" width="170" height="120"/>
+    <rect x="530" y="200" width="140" height="80"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="165" y="248">Referencias</text>
+    <text x="385" y="235">Model Block</text>
+    <text x="385" y="265" font-size="18">(PIL)</text>
+    <text x="600" y="248">Planta</text>
+  </g>
+
+  <!-- Senales dentro del modelo de prueba -->
+  <g fill="none" stroke="#222" stroke-width="2.5">
+    <path d="M240,240 H298" marker-end="url(#flecha)"/>
+    <path d="M470,240 H528" marker-end="url(#flecha)"/>
+    <path d="M670,240 H685 V360 H385 V302" marker-end="url(#flecha)"/>
+  </g>
+
+  <!-- Comunicacion entre el bloque Model y la placa -->
+  <path d="M385,178 V150 H790 V260 H848" fill="none" stroke="#222" stroke-width="2.5" marker-start="url(#flecha)" marker-end="url(#flecha)"/>
+  <text x="545" y="140" text-anchor="middle" font-size="18" fill="#555">Serial o TCP/IP, en cada paso</text>
+</svg>

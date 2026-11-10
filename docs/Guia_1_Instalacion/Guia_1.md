@@ -17,9 +17,9 @@ Primero que nada, para usar una simulación PIL hay que preparar cinco elementos
 
 1. Los productos de MathWorks que generan el código C desde Simulink.
 2. Un compilador de C en el computador.
-3. Un paquete de soporte para la placa.
+3. Un paquete de soporte para la placa(Toolbox de Matlab).
 4. Una toolchain que compila ese código para el procesador de la placa.
-5. Las herramientas propias de cada placa: el sistema operativo en la Raspberry Pi y STM32CubeMX en la STM32, que se instala con el paquete de soporte aunque no se usa en estas guías.
+5. Las herramientas propias de cada placa: el sistema operativo en la Raspberry Pi y STM32CubeMX para la STM32, que se instala con el paquete de soporte aunque no se usa en estas guías.
 
 Los dos primeros elementos tienen una instalación comun para cualquier placa; los tres últimos dependen de una instalación especifica ([Requerimientos de Embedded Coder](https://www.mathworks.com/support/requirements/embedded-coder.html)).
 
@@ -48,7 +48,9 @@ Embedded Coder también requiere un compilador de C en el computador, aparte de 
 
 Por conveniencia, se utilizará el compilador MinGW para estas guías, ([Link MinGW de Matlab](https://la.mathworks.com/matlabcentral/fileexchange/52848-matlab-support-for-mingw-w64-c-c-fortran-compiler)).
 
-![Embedded Coder Support Package](img/MinGW.png){ width="700" }
+![MATLAB Support for MinGW-w64 C/C++/Fortran Compiler](img/MinGW.png){ width="700" }
+
+*Figura 2: Complemento MinGW-w64 instalado en MATLAB.*
 
 ## Instalación específica: STM32 Nucleo F767ZI
 
@@ -57,9 +59,11 @@ Por conveniencia, se utilizará el compilador MinGW para estas guías, ([Link Mi
 El soporte para STM32 se instala como un complemento aparte. Este es su nombre en R2025b, la versión usada en estas guías:
 
 - Embedded Coder Support Package for STMicroelectronics STM32 Processors.
-La familia STM32F7xx, a la que pertenece la STM32 Nucleo F767ZI, tiene soporte, por lo que su configuración es más fácil. (Si la placa no tiene soporte, se puede realizar la simulación PIL, pero antes hay que configurar los pines de comunicación en STM32CubeMX.) ([Link Embedded Coder](https://www.mathworks.com/matlabcentral/fileexchange/43093))
+La familia STM32F7xx, a la que pertenece la STM32 Nucleo F767ZI, tiene soporte, por lo que su configuración es más fácil. (Si la placa no tiene soporte, se puede realizar la simulación PIL, pero antes hay que configurar los pines de comunicación en STM32CubeMX.) ([Link Support STM32](https://www.mathworks.com/matlabcentral/fileexchange/43093))
 
 ![Embedded Coder Support Package](img/SupportSTM32.png){ width="900" }
+
+*Figura 3: Paquete de soporte para STM32 instalado.*
 
 ### 4) Toolchain para STM32
 
@@ -69,6 +73,8 @@ En la pantalla *Select STM32 MCUs Family*, marca **STM32F7xx Based MCUs**, la fa
 
 ![Selección de la familia STM32 en Hardware Setup](img/setup.png){ width="600" style="display:block; margin:0 auto" }
 
+*Figura 4: Selección de la familia STM32F7xx en el asistente Hardware Setup.*
+
 Sigue los pasos del asistente hasta terminar. En la pantalla de instalación de herramientas de terceros, presiona **Install** y acepta los permisos de administrador si los pide.
 
 ### 5) Herramientas propias de la STM32
@@ -76,6 +82,8 @@ Sigue los pasos del asistente hasta terminar. En la pantalla de instalación de 
 La herramienta propia de esta placa es **STM32CubeMX**, que genera el código de inicialización de los periféricos. Viene con el asistente *Hardware Setup* del paquete de soporte, en la misma ventana donde se instala la toolchain.
 
 ![STM32Cubemx](img/STM32Cubemx.png){ width="400" style="display:block; margin:0 auto" }
+
+*Figura 5: Logo de STM32CubeMX.*
 
 STM32CubeMX se instala, pero no se usa en las simulaciones de estas guías: como la STM32 Nucleo F767ZI tiene soporte, el puerto serial se configura directamente en Simulink.
 
@@ -96,9 +104,13 @@ Permite ejecutar modelos de Simulink en la Raspberry Pi. ([Link Support Raspberr
 
 ![Simulink Support Package for Raspberry Pi Hardware](img/SupportRaspberrySimulink.png){ width="700" }
 
+*Figura 6: Paquete de soporte para Raspberry Pi instalado.*
+
 Una vez instalado, abre su asistente *Hardware Setup* desde el **Add-On Manager** (**Home > Add-Ons > Manage Add-Ons**) con el botón **Setup**. En **Hardware Board**, selecciona *Raspberry Pi 5 Model* y sigue los pasos del asistente hasta terminar. La placa debe estar encendida, con el sistema operativo ya escrito en la tarjeta SD y, por conveniencia, en la misma red que el computador.
 
 ![Asistente Hardware Setup de la Raspberry Pi 5](img/setupRaspberry.png){ width="600" style="display:block; margin:0 auto" }
+
+*Figura 7: Selección de la Raspberry Pi 5 en el asistente Hardware Setup.*
 
 ### 4) Toolchain para Raspberry Pi 5
 
