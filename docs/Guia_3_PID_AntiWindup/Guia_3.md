@@ -165,7 +165,7 @@ El bloque C Function conecta el modelo con el código en C. Al inicio llama a `p
 
 ## Paso 3: Configurar el modelo del controlador
 
-Configure el solver, la placa, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.
+Configure el solver, la placa, la comunicación, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 2, en Model Configuration Parameters.
 
 *Tabla 2: Configuración adicional del modelo pid_aw_ctrl.*
 
@@ -179,12 +179,12 @@ Configure el solver, la placa, el System target file y la toolchain como se expl
 
 El código propio se indica dos veces porque Simulation Target lo usa al simular en el computador y Custom Code lo usa al generar el código para la placa.
 
+El número de instancias se limita a One porque los estados del controlador, `I` y `xf`, son variables `static` en `pid_aw.c`. Si dos bloques Model usaran el mismo controlador, compartirían esos estados y cada uno sobrescribiría los del otro.
 
-## Paso 4: Configurar la comunicación
 
-En cada paso, el computador envía a la placa la referencia $r[k]$, la medición $y[k]$ y el vector de parámetros, y recibe de vuelta las señales $u[k]$ y $v[k]$ (Figura 1). Este intercambio ocurre por el puerto serial.
+## Paso 4: Comunicación con la placa
 
-Configure el puerto como se explica en la Guía 2: en **Hardware Implementation > Target hardware resources > PIL**, elija **Serial** en **PIL communication interface** y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.
+En cada paso, el computador envía a la placa la referencia $r[k]$, la medición $y[k]$ y el vector de parámetros, y recibe de vuelta las señales $u[k]$ y $v[k]$ (Figura 1). Este intercambio ocurre por el puerto serial configurado en el Paso 3.
 
 ## Paso 5: Crear el modelo de prueba
 
@@ -215,7 +215,7 @@ Conecte la placa y presione Run. Simulink genera el código del controlador, lo 
 
 ## Paso 7: Verificar la equivalencia numérica
 
-Como el controlador admite una sola instancia, no se pueden tener dos lazos en paralelo con el mismo controlador. La comparación se hace con dos ejecuciones del mismo modelo:
+Como el controlador admite una sola instancia (Paso 3), no se pueden tener dos lazos en paralelo con el mismo controlador. La comparación se hace con dos ejecuciones del mismo modelo:
 
 1. Ejecute la simulación en modo PIL, como en el Paso 6.
 2. Cambie el Simulation mode del bloque Model a Normal y ejecute de nuevo.

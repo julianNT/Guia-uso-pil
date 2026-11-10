@@ -70,8 +70,6 @@ Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrado
 
 *Figura 4: Pestaña PIL de la STM32.*
  
-Indica también el mismo COM en la pestaña **External mode**.
- 
 ### Paso 3: Seleccionar el System target file y la toolchain
  
 Para poder usar PIL, en **Code Generation > System target file** selecciona `ert.tlc`, que corresponde a Embedded Coder.

@@ -230,7 +230,7 @@ Por último, indique de dónde toma el bloque su código propio (Custom Code Loc
 
 ## Paso 5: Configurar el modelo del controlador
 
-Configure el solver, la placa, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.
+Configure el solver, la placa, la comunicación, el System target file y la toolchain como se explica en la [Guía 2](../Guia_2_Configuracion/Guia_2.md). Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.
 
 *Tabla 4: Configuración adicional del modelo mpc_ctrl.*
 
@@ -254,15 +254,13 @@ El número de instancias se limita a One porque OSQP guarda su estado en la vari
 
 *Figura 7: Número de instancias en Model Referencing.*
 
-## Paso 6: Configurar la comunicación
+## Paso 6: Comunicación con la placa
 
-En cada paso, el computador envía a la placa el estado $x[k]$, la referencia, el límite de corriente y el torque de carga, y recibe la tensión $V[k]$ y el número de iteraciones (Figura 1). Este intercambio ocurre por el puerto serial.
-
-Configure el puerto como se explica en la Guía 2: en **Hardware Implementation > Target hardware resources > PIL**, elija **Serial** en **PIL communication interface** y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.
+En cada paso, el computador envía a la placa el estado $x[k]$, la referencia, el límite de corriente y el torque de carga, y recibe la tensión $V[k]$ y el número de iteraciones (Figura 1). Este intercambio ocurre por el puerto serial configurado en el Paso 5.
 
 ## Paso 7: Crear el modelo de prueba
 
-Cree el modelo `lazo.slx` en la misma carpeta y aplique la configuración de placa, System target file y toolchain de la Guía 2, junto con la comunicación del Paso 6. La Figura 8 muestra el lazo cerrado que contiene.
+Cree el modelo `lazo.slx` en la misma carpeta y aplique la configuración de la Guía 2. La Figura 8 muestra el lazo cerrado que contiene.
 
 Un escalón entrega la referencia de velocidad, que sube a 1 rad/s en $t = 0.1$ s. Una constante fija el límite de corriente en 10 A, y otro escalón aplica un torque de carga de 0.005 N·m en $t = 0.8$ s. El bloque Model llama al controlador `mpc_ctrl`. La planta es un bloque Discrete State-Space con las matrices de la Ecuación 3, redondeadas a cuatro decimales: $A = A_d$, $B = [B_d\ \ B_{p,d}]$, $C$ igual a la identidad, $D$ igual a cero, condiciones iniciales cero y tiempo de muestreo 0.01. Tres Scope muestran $x$, $V$ e `iter`.
 
