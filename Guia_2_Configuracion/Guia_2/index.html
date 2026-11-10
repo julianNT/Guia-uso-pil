@@ -334,6 +334,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuracion-del-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración del modelo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#paso-previo-solver-del-modelo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -566,6 +577,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuracion-del-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración del modelo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#paso-previo-solver-del-modelo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -708,7 +730,18 @@
 <h2 id="objetivo">Objetivo</h2>
 <p>Para esta etapa se configura el modelo de Simulink para ejecutar PIL en la <strong>STM32 Nucleo F767ZI</strong> y en la <strong>Raspberry Pi 5</strong>. La configuración se hace una sola vez por modelo e indica para qué placa y con qué herramientas se genera el código, y cómo se comunica con el computador.</p>
 <h2 id="contexto">Contexto</h2>
+<p>En las posteriores guias, la simulación PIL usa el bloque <strong>Model</strong>, que permite incluir un modelo de Simulink dentro de otro (<a href="https://www.mathworks.com/help/simulink/slref/model.html">Model</a>). Por eso cada ejemplo tiene dos modelos, como muestra la Figura 1:</p>
+<ul>
+<li>El <strong>modelo de prueba</strong> contiene las referencias, la planta y un bloque Model que llama al modelo del controlador. Es el modelo más grande y se simula en el computador.</li>
+<li>El <strong>modelo del controlador</strong> contiene solo el controlador. Es el modelo más pequeño y es el que se ejecuta en la placa.</li>
+</ul>
+<p>En cada paso de la simulación, el bloque Model envía a la placa las entradas del controlador y recibe sus salidas, por un puerto serial o por la red.</p>
+<p><strong>Cabe recalcar que ambos modelos deben configurarse como se indica en esta guía.</strong></p>
+<p><img alt="Modelo de prueba simulado en el computador y modelo del controlador ejecutado en la placa" src="../img/modelos_pil.svg" /></p>
+<p><em>Figura 1: Esquema del modelo de prueba en el computador y del modelo del controlador en la placa.</em></p>
+<h2 id="configuracion-del-modelo">Configuración del modelo</h2>
 <p>Con las herramientas de la Guía 1 instaladas, falta indicarle a Simulink con qué placa trabajar y cómo conectarse a ella. Esa información se ingresa en el cuadro <strong>Configuration Parameters</strong> del modelo, que se abre con Ctrl+E.</p>
+<p>Cada modelo tiene su propio cuadro Configuration Parameters, así que la configuración de esta guía se aplica en los dos: solver de paso fijo, la misma placa, la misma comunicación, <code>ert.tlc</code> y la misma toolchain. Además, el modelo del controlador necesita algunas opciones propias, que se indican en cada guía.</p>
 <p>Lo que cambia entre las plataformas es el canal de comunicación: la STM32 usa un puerto serial y la Raspberry Pi usa la red (TCP/IP). Estas guías solo cubren placas con soporte, como la STM32 Nucleo F767ZI, que se configuran directamente en Simulink. Las placas STM32 sin soporte tienen otra opción de configuración, mediante un proyecto de STM32CubeMX, que no se aborda aquí (<a href="https://www.mathworks.com/help/releases/R2025b/ecoder/stmicroelectronicsstm32f4discovery/ug/STM32-CubeMX-Configuration.html">Configure STM32 Boards using STM32CubeMX with Simulink</a>).</p>
 <h2 id="paso-previo-solver-del-modelo">Paso previo: solver del modelo</h2>
 <p>Para generar y verificar código, el modelo debe usar un solver de paso fijo, porque el código generado solo admite ese tipo de solver. El solver se deja en automático, para que Simulink lo elija según el modelo.</p>
@@ -738,25 +771,30 @@
 </table>
 <p><strong>Fixed-step size</strong> se deja en <code>auto</code>, su valor por defecto, que elige un paso que cubra todos los tiempos de muestreo del modelo (<a href="https://www.mathworks.com/help/simulink/gui/fixedstepsizefundamentalsampletime.html">Fixed-step size</a>).</p>
 <p><img alt="Configuración del solver en Configuration Parameters" src="../img/image-2.png" /></p>
+<p><em>Figura 2: Sección Solver de Configuration Parameters.</em></p>
 <h2 id="configuracion-1-stm32-con-soporte">Configuración 1: STM32 con soporte</h2>
 <p>Es el caso de la STM32 Nucleo F767ZI: Simulink la reconoce por nombre, por lo que solo hay que elegir la placa, indicar cómo se comunica con el computador y seleccionar las opciones de generación de código. Todo se hace en <strong>Configuration Parameters</strong>: las dos primeras en la sección <strong>Hardware Implementation</strong> y la última en <strong>Code Generation</strong>.</p>
 <h3 id="paso-1-seleccionar-la-placa">Paso 1: Seleccionar la placa</h3>
 <p>Lo primero es indicar para qué placa se generará el código. Despliega <strong>Hardware Implementation &gt; Hardware board</strong> y selecciona <em>STM32 Nucleo F767ZI</em>. Al elegirla, aparecen debajo los parámetros propios de la placa, entre ellos <strong>Target hardware resources</strong>, que se usa en el paso siguiente.</p>
 <p><img alt="Selección de STM32 Nucleo F767ZI en Hardware board" src="../img/image-6.png" /></p>
+<p><em>Figura 3: Selección de la STM32 Nucleo F767ZI en Hardware board.</em></p>
 <h3 id="paso-2-configurar-la-comunicacion">Paso 2: Configurar la comunicación</h3>
 <p>En PIL, el modelo se comunica con la placa por un puerto serial: el computador ve la placa como un puerto COM, y el modelo necesita saber cuál es.</p>
 <p>Conecta la placa con un cable Micro USB y anota su puerto COM en el Administrador de dispositivos, en <em>Puertos (COM y LPT)</em>. Luego, en <strong>Hardware Implementation &gt; Target hardware resources</strong>, entra a la pestaña <strong>PIL</strong>. En <strong>PIL communication interface</strong>, elige <strong>Serial</strong> y, en <strong>Serial port</strong>, escribe el COM anotado.</p>
 <p><img alt="Pestaña PIL con la interfaz Serial y el puerto COM3" src="../img/image-8.png" /></p>
+<p><em>Figura 4: Pestaña PIL de la STM32.</em></p>
 <p>Indica también el mismo COM en la pestaña <strong>External mode</strong>.</p>
 <h3 id="paso-3-seleccionar-el-system-target-file-y-la-toolchain">Paso 3: Seleccionar el System target file y la toolchain</h3>
 <p>Para poder usar PIL, en <strong>Code Generation &gt; System target file</strong> selecciona <code>ert.tlc</code>, que corresponde a Embedded Coder.</p>
 <p>La toolchain es el compilador que Simulink usa para construir el código generado. En <strong>Code Generation &gt; Toolchain</strong>, selecciona <strong>GNU Tools for ARM Embedded Processors</strong>, la que instaló el asistente en la Guía 1.</p>
 <p><img alt="STM32 Nucleo F767ZI con ert.tlc como System target file" src="../img/image-1.png" /></p>
+<p><em>Figura 5: ert.tlc como System target file de la STM32.</em></p>
 <h2 id="configuracion-2-raspberry-pi-5">Configuración 2: Raspberry Pi 5</h2>
 <p>La Raspberry Pi 5 es un computador con Linux, por lo que no se configuran periféricos ni pines. Simulink se conecta a ella por red, usando la dirección y las credenciales de su Linux, y esos datos se ingresan en la configuración del modelo (<a href="https://www.mathworks.com/help/releases/R2025b/simulink/supportpkg/raspberrypi_ref/raspberrypi-model-configuration-parameters.html">Model Configuration Simulink Support Package for Raspberry Pi Hardware</a>). La placa debe estar encendida y, por conveniencia, en la misma red que el computador. Aquí también se parte con el solver del paso previo.</p>
 <h3 id="paso-1-seleccionar-la-placa_1">Paso 1: Seleccionar la placa</h3>
 <p>Igual que en la STM32, se indica para qué placa se genera el código. En <strong>Hardware Implementation &gt; Hardware board</strong>, selecciona <em>Raspberry Pi (64bit)</em>. Esto carga los parámetros por defecto de la placa, que se completan en el paso siguiente.</p>
 <p><img alt="Selección de Raspberry Pi (64bit) en Hardware board" src="../img/image-9.png" /></p>
+<p><em>Figura 6: Selección de Raspberry Pi (64bit) en Hardware board.</em></p>
 <h3 id="paso-2-completar-los-parametros-de-conexion">Paso 2: Completar los parámetros de conexión</h3>
 <p>Con la placa seleccionada aparecen sus parámetros. Para que Simulink se comunique con la Raspberry hay que modificar tres de ellos, en <strong>Target hardware resources &gt; Board Parameters</strong>, con el botón <strong>Edit</strong>. Con estos datos queda configurada indirectamente la comunicación por TCP/IP.</p>
 <p><em>Tabla 2: Parámetros de conexión con la Raspberry Pi.</em></p>
@@ -783,11 +821,13 @@
 </tbody>
 </table>
 <p><img alt="Parámetros de conexión de la Raspberry Pi en Board Parameters" src="../img/image-10.png" /></p>
+<p><em>Figura 7: Parámetros de conexión de la Raspberry Pi.</em></p>
 <h3 id="paso-3-seleccionar-el-system-target-file-y-la-toolchain_1">Paso 3: Seleccionar el System target file y la toolchain</h3>
 <p>Igual que en la STM32, en <strong>Code Generation &gt; System target file</strong> selecciona <code>ert.tlc</code>. En <strong>Code Generation &gt; Toolchain</strong>, selecciona <strong>GNU GCC Embedded Linux</strong>.</p>
 <p><img alt="System target file y toolchain GNU GCC Embedded Linux en Code Generation" src="../img/image-11.png" /></p>
+<p><em>Figura 8: System target file y toolchain de la Raspberry Pi.</em></p>
 <h2 id="validacion">Validación</h2>
-<p>Si el modelo tiene el solver de paso fijo, la placa seleccionada, los parámetros de comunicación completos, <code>ert.tlc</code> como System target file y la toolchain de la placa seleccionada, la configuración está lista. Guarda el modelo.</p>
+<p>Si el modelo tiene el solver de paso fijo, la placa seleccionada, los parámetros de comunicación completos, <code>ert.tlc</code> como System target file y la toolchain de la placa seleccionada, la configuración está lista. Guarda el modelo. Cuando se trabaja con dos modelos, como en las Guías 3 y 4, esta revisión se hace en ambos.</p>
 
 
 

@@ -732,7 +732,7 @@ G(z) = \frac{b_d}{z - a_d}, \quad a_d = e^{-T_s/\tau} = 0.9048, \quad b_d = 1 - 
 <h3 id="el-problema-del-windup">El problema del windup</h3>
 <p>Todo actuador tiene un límite. Cuando el controlador pide más de lo que el actuador puede entregar, la señal que llega a la planta queda fija en ese límite, pero el integrador sigue acumulando el error. Su estado crece sin que eso tenga efecto sobre la planta. Cuando la referencia cambia, el controlador primero debe descargar lo acumulado, y por eso la respuesta se retrasa. A este fenómeno se le llama windup.</p>
 <h3 id="controlador">Controlador</h3>
-<p>El controlador es un PID paralelo con derivada filtrada, saturación y anti-windup por back-calculation. Este método realimenta al integrador la diferencia entre la señal saturada y la señal sin saturar (<a href="https://www.mathworks.com/help/simulink/slref/discretepidcontroller.html">Discrete PID Controller</a>). En tiempo continuo, el controlador y su integrador se describen con la Ecuación 2.</p>
+<p>El controlador es un PID paralelo con derivada filtrada, saturación y anti-windup por back-calculation. Este método realimenta al integrador la diferencia entre la señal saturada y la señal sin saturar. En tiempo continuo, el controlador y su integrador se describen con la Ecuación 2.</p>
 <div class="arithmatex">\[
 C(s) = K_p + \frac{K_i}{s} + \frac{K_d\, s}{T_f s + 1}, \quad \dot{I} = K_i e + K_b (u - v) \tag{2}
 \]</div>
@@ -816,7 +816,11 @@ x_f[k+1] = x_f[k] + \frac{T_s}{T_f}\left(e[k] - x_f[k]\right) \tag{7}
 </tr>
 </tbody>
 </table>
-<p>El periodo de muestreo y los coeficientes de la planta se definen como variables del workspace. Para que se carguen al abrir los modelos, se escriben en el callback PreLoadFcn de cada uno: <code>Ts</code> y <code>tau</code>, con los valores del caso de estudio, y <code>ad</code> y <code>bd</code>, calculados como en la Ecuación 1.</p>
+<p>El periodo de muestreo y los coeficientes de la planta se definen como variables del workspace: <code>Ts</code> y <code>tau</code>, con los valores del caso de estudio, y <code>ad</code> y <code>bd</code>, calculados como en la Ecuación 1. Para que se carguen solas al abrir los modelos, se escriben en el callback PreLoadFcn de cada uno, que MATLAB ejecuta antes de cargar el modelo. Se encuentra en <strong>Modeling &gt; Model Settings &gt; Model Properties</strong>, pestaña <strong>Callbacks</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Ts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">;</span><span class="w"> </span><span class="n">tau</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.01</span><span class="p">;</span><span class="w"> </span><span class="n">ad</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Ts</span><span class="o">/</span><span class="n">tau</span><span class="p">);</span><span class="w"> </span><span class="n">bd</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ad</span><span class="p">;</span>
+</code></pre></div>
+<p>El callback se ejecuta solo al abrir el modelo. Después de escribirlo, cierre y vuelva a abrir el modelo, o ejecute la línea una vez en la Command Window.</p>
+<p><code>Ts</code> es el único periodo de muestreo del ejemplo: lo usan los bloques de los dos modelos y el controlador, que lo recibe como el elemento <code>p[5]</code>.</p>
 <h2 id="paso-2-crear-el-modelo-del-controlador">Paso 2: Crear el modelo del controlador</h2>
 <p>Cree una carpeta de trabajo y escriba en ella el código del controlador, en los archivos <code>pid_aw.c</code> y <code>pid_aw.h</code>. El código tiene dos funciones:</p>
 <ul>

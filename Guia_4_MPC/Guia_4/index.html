@@ -1028,11 +1028,11 @@ python generar_mpc_motor.py
 </code></pre></div>
 <p>Por último, indique de dónde toma el bloque su código propio (Custom Code Location). Haga clic en la flecha junto al ícono de engranaje, arriba a la derecha de la ventana del bloque, y seleccione Use Configuration Parameters Custom Code, como muestra la Figura 5. Con esa opción, el bloque toma los archivos C de la configuración del modelo, que se define en el Paso 5, en lugar de una configuración propia del bloque. Si se deja la opción por defecto, Use Block Custom Code, el bloque no encuentra <code>mpc_motor.h</code>.</p>
 <p><img alt="Bloque C Function con el código y la tabla de símbolos" src="../img/cfuntion_tabla.png" /></p>
-<p><em>Figura 4: Bloque C Function con el código de Output y los símbolos de la Tabla 3.</em></p>
+<p><em>Figura 4: Configuración del bloque C Function.</em></p>
 <p><img alt="Opción Custom Code Location del bloque C Function" src="../img/cfuntion_custom_code.png" /></p>
-<p><em>Figura 5: Menú del engranaje del bloque C Function con la opción Use Configuration Parameters Custom Code.</em></p>
+<p><em>Figura 5: Opción Custom Code Location del bloque C Function.</em></p>
 <h2 id="paso-5-configurar-el-modelo-del-controlador">Paso 5: Configurar el modelo del controlador</h2>
-<p>Configure la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.</p>
+<p>Configure el solver, la placa, el System target file y la toolchain como se explica en la <a href="../../Guia_2_Configuracion/Guia_2/">Guía 2</a>. Este controlador necesita además las opciones de la Tabla 4, en Model Configuration Parameters. Abra ese cuadro con Ctrl+E.</p>
 <p><em>Tabla 4: Configuración adicional del modelo mpc_ctrl.</em></p>
 <table>
 <thead>
@@ -1043,11 +1043,6 @@ python generar_mpc_motor.py
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>Solver</td>
-<td>Type, Solver y Fixed-step size</td>
-<td>Fixed-step, discrete (no continuous states) y 0.01</td>
-</tr>
 <tr>
 <td>Model Referencing</td>
 <td>Total number of instances allowed per top model</td>
@@ -1078,9 +1073,9 @@ python generar_mpc_motor.py
 <p>Simulation Target y Custom Code llevan los mismos archivos: el primero se usa al simular en el computador y el segundo al generar código para la placa. En Include directories y Source files escriba las rutas completas, una por línea. La lista de fuentes incluye <code>workspace.c</code>, que está dentro de <code>osqp\src</code>.</p>
 <p>El número de instancias se limita a One porque OSQP guarda su estado en la variable global <code>workspace</code>. La opción Include custom code for referenced models se encuentra en Model Referencing, dentro de Advanced parameters.</p>
 <p><img alt="Archivos fuente en Simulation Target" src="../img/config_simulation_target.png" /></p>
-<p><em>Figura 6: Archivos fuente en el panel Simulation Target del modelo mpc_ctrl.</em></p>
+<p><em>Figura 6: Archivos fuente en Simulation Target.</em></p>
 <p><img alt="Número de instancias en Model Referencing" src="../img/ModelReferencing.png" /></p>
-<p><em>Figura 7: Número de instancias del modelo limitado a One en Model Referencing.</em></p>
+<p><em>Figura 7: Número de instancias en Model Referencing.</em></p>
 <h2 id="paso-6-configurar-la-comunicacion">Paso 6: Configurar la comunicación</h2>
 <p>En cada paso, el computador envía a la placa el estado <span class="arithmatex">\(x[k]\)</span>, la referencia, el límite de corriente y el torque de carga, y recibe la tensión <span class="arithmatex">\(V[k]\)</span> y el número de iteraciones (Figura 1). Este intercambio ocurre por el puerto serial.</p>
 <p>Configure el puerto como se explica en la Guía 2: en <strong>Hardware Implementation &gt; Target hardware resources &gt; PIL</strong>, elija <strong>Serial</strong> en <strong>PIL communication interface</strong> y escriba en Serial port el COM de la placa. Indique también ese COM en la pestaña External mode.</p>
@@ -1089,8 +1084,8 @@ python generar_mpc_motor.py
 <p>Un escalón entrega la referencia de velocidad, que sube a 1 rad/s en <span class="arithmatex">\(t = 0.1\)</span> s. Una constante fija el límite de corriente en 10 A, y otro escalón aplica un torque de carga de 0.005 N·m en <span class="arithmatex">\(t = 0.8\)</span> s. El bloque Model llama al controlador <code>mpc_ctrl</code>. La planta es un bloque Discrete State-Space con las matrices de la Ecuación 3, redondeadas a cuatro decimales: <span class="arithmatex">\(A = A_d\)</span>, <span class="arithmatex">\(B = [B_d\ \ B_{p,d}]\)</span>, <span class="arithmatex">\(C\)</span> igual a la identidad, <span class="arithmatex">\(D\)</span> igual a cero, condiciones iniciales cero y tiempo de muestreo 0.01. Tres Scope muestran <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(V\)</span> e <code>iter</code>.</p>
 <p>La matriz <span class="arithmatex">\(B\)</span> tiene dos columnas porque la planta recibe dos entradas: la tensión <span class="arithmatex">\(V\)</span> que entrega el MPC y el torque de carga <span class="arithmatex">\(T_L\)</span>. Por eso un bloque Mux junta <span class="arithmatex">\(V\)</span> y <span class="arithmatex">\(T_L\)</span> en un vector antes de la planta. La matriz <span class="arithmatex">\(C\)</span> es la identidad porque el controlador necesita los dos estados, de modo que la salida de la planta es el vector <span class="arithmatex">\(x = [\,i;\ \omega\,]\)</span>. Esa salida vuelve a la entrada <code>x</code> del bloque Model, lo que cierra el lazo.</p>
 <p><img alt="Modelo de prueba" src="../img/modelo_lazo.png" /></p>
-<p><em>Figura 8: Modelo lazo. El bloque MPC está en modo PIL.</em></p>
-<p>En Configuration Parameters del modelo <code>lazo.slx</code>, use Type Fixed-step, Solver ode4, Fixed-step size 0.001 y Stop time 1.5. Aunque el paso del modelo es de 1 ms, los bloques discretos se siguen ejecutando cada 10 ms.</p>
+<p><em>Figura 8: Modelo de prueba lazo.</em></p>
+<p>En Configuration Parameters del modelo <code>lazo.slx</code>, fije Stop time en 1.5 s, que es la duración de la prueba.</p>
 <p>Igual que en la Guía 3, este modelo tiene un solo bloque Model, porque el Paso 5 limita el controlador a una sola instancia. La comparación se hace en el Paso 9, ejecutando la misma simulación dos veces.</p>
 <p>Antes de simular, active el registro de las señales <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(V\)</span> e <code>iter</code>. Haga clic derecho sobre cada línea y seleccione Log Selected Signals. En la Figura 8, las señales registradas muestran un ícono de antena.</p>
 <h2 id="paso-8-ejecutar-la-simulacion-pil">Paso 8: Ejecutar la simulación PIL</h2>
@@ -1103,7 +1098,7 @@ python generar_mpc_motor.py
 </ol>
 <p>Para medir cuánto tarda la placa en ejecutar el controlador, active la medición del tiempo de ejecución en el modelo <code>lazo.slx</code>. En Configuration Parameters &gt; Code Generation &gt; Verification, marque Measure task execution time, escriba <code>executionProfile</code> en Workspace variable y seleccione All data en Save options.</p>
 <p><img alt="Medición del tiempo de ejecución" src="../img/config_verification.png" /></p>
-<p><em>Figura 9: Opción Measure task execution time en Code Generation &gt; Verification.</em></p>
+<p><em>Figura 9: Medición del tiempo de ejecución en Verification.</em></p>
 <p>Conecte la placa y presione Run en la pestaña Simulation. Simulink genera el código del controlador, lo compila junto con <code>mpc_motor.c</code> y la librería OSQP, lo descarga a la placa y abre la comunicación por el puerto serial. La primera ejecución tarda alrededor de un minuto y medio, porque compila la librería completa.</p>
 <p>Use el botón Run de la pestaña Simulation. Si prefiere usar el SIL/PIL Manager, revise que System Under Test esté en Model blocks in SIL/PIL mode. Con la opción Top model, el SIL/PIL Manager trata el modelo superior como sistema bajo prueba, es decir, intenta llevar a la placa el lazo completo con la planta incluida, y la compilación falla.</p>
 <h2 id="paso-9-verificar-la-equivalencia-numerica">Paso 9: Verificar la equivalencia numérica</h2>
@@ -1116,7 +1111,7 @@ python generar_mpc_motor.py
 <p>Las dos ejecuciones también se pueden comparar en la pestaña Compare del Simulation Data Inspector (<a href="https://www.mathworks.com/help/simulink/ug/compare-simulation-data.html">Compare Simulation Data</a>).</p>
 <p>La Figura 10 muestra ambas simulaciones superpuestas. En las pruebas de este trabajo, el número de iteraciones de OSQP fue igual en los 151 pasos de las dos ejecuciones y la diferencia máxima en la tensión y en los estados fue cero.</p>
 <p><img alt="Resultados MIL y PIL" src="../img/resultado_mil_pil.png" /></p>
-<p><em>Figura 10: Velocidad, corriente, tensión e iteraciones de OSQP en la simulación normal (MIL) y en la simulación PIL.</em></p>
+<p><em>Figura 10: Respuesta del lazo en las simulaciones normal (MIL) y PIL.</em></p>
 <p>La respuesta muestra cómo actúan las restricciones. Cuando la referencia sube a 1 rad/s en <span class="arithmatex">\(t = 0.1\)</span> s, el MPC aplica la tensión máxima de 24 V hasta que la corriente llega a cerca de 10 A, con un pequeño sobrepaso cercano a 10.2 A, y luego mantiene la corriente en torno a ese límite mientras el motor acelera. En <span class="arithmatex">\(t = 0.8\)</span> s entra el torque de carga. Según la Ecuación 4, mantener 1 rad/s con esa carga requiere 10.5 A, más que el límite. Por eso la corriente se mantiene en torno a 10 A y la velocidad se estabiliza cerca de 0.95 rad/s, bajo la referencia. El gráfico inferior muestra que OSQP llega al máximo de 100 iteraciones aproximadamente entre <span class="arithmatex">\(t = 0.3\)</span> s y <span class="arithmatex">\(t = 1\)</span> s, y que después el número de iteraciones baja mientras la respuesta se estabiliza.</p>
 <h2 id="paso-10-medir-el-tiempo-de-ejecucion">Paso 10: Medir el tiempo de ejecución</h2>
 <p>Después de la simulación PIL, la variable <code>executionProfile</code> queda en el workspace. Para ver el informe, ejecute:</p>
@@ -1124,7 +1119,7 @@ python generar_mpc_motor.py
 </code></pre></div>
 <p>El informe muestra el tiempo de ejecución medio y máximo de cada función del controlador. La Figura 11 muestra el tiempo de cada paso a lo largo de la simulación.</p>
 <p><img alt="Tiempo de ejecución en la STM32" src="../img/tiempos_stm32.png" /></p>
-<p><em>Figura 11: Tiempo de ejecución del controlador en la STM32 Nucleo F767ZI en cada paso.</em></p>
+<p><em>Figura 11: Tiempo de ejecución del controlador en la STM32.</em></p>
 <p>En las pruebas de este trabajo, el paso del controlador tardó 16.2 ms en promedio y 28.4 ms como máximo, mientras que el periodo de muestreo es de 10 ms. El tiempo sigue de cerca al número de iteraciones de la Figura 10: cuando OSQP necesita 100 iteraciones, el paso tarda cerca de 28 ms, y cuando necesita pocas iteraciones, baja de 2 ms.</p>
 <p>Este resultado no afecta la simulación PIL, porque PIL no se ejecuta en tiempo real: en cada paso, Simulink envía los datos, la placa ejecuta un paso del controlador y Simulink avanza al siguiente paso solo cuando recibe la respuesta (<a href="https://www.mathworks.com/help/ecoder/ug/about-sil-and-pil-simulations.html">SIL and PIL Simulations</a>). Sin embargo, indica que el controlador, tal como está, no alcanzaría a cumplir el periodo de 10 ms en una aplicación real. El código se compiló sin optimizaciones del compilador (opción -O0, visible en la ventana de diagnóstico). Las formas de reducir el tiempo son activar la optimización del compilador, reducir el máximo de iteraciones, acortar el horizonte o aumentar el periodo de muestreo. Esta guía no evalúa esas alternativas.</p>
 <p>Al completar esta guía, el lector cuenta con un controlador MPC con el solver OSQP ejecutándose en la STM32 Nucleo F767ZI mediante PIL, verificado contra la simulación en el computador y con su tiempo de ejecución medido en la placa.</p>
